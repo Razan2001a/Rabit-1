@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}رابط RABIT — منصة الاستثمار الذكية{% endblock %}
+
+{% block body %}
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container header-inner">
+    <div class="logo">
+      <img src="{% static 'images/logo-small.png' %}" alt="رابط" class="logo-img">
+      <span class="logo-text">رابط <span class="logo-en">RABIT</span></span>
+    </div>
+
+    <nav class="nav-desktop" id="navDesktop">
+      {% if request.user.is_authenticated %}
+        {% if request.user.role == 'advisor' %}
+          <a href="{% url 'dashboard:advisor' %}"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-requests"><i class="ti ti-inbox"></i> طلبات الخدمات</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-active"><i class="ti ti-loader"></i> جاري التنفيذ</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-done"><i class="ti ti-circle-check"></i> المكتملة</a>
+          <a href="{% url 'profiles:advisor_edit' %}"><i class="ti ti-user-check"></i> ملفي المهني</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-earnings"><i class="ti ti-wallet"></i> الأرباح</a>
+        {% elif request.user.role == 'startup' %}
+          <a href="{% url 'dashboard:startup' %}"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+          <a href="{% url 'dashboard:startup' %}#dp-profile"><i class="ti ti-building"></i> ملف الشركة</a>
+          <a href="{% url 'dashboard:startup' %}#dp-investors"><i class="ti ti-users"></i> المستثمرون</a>
+          <a href="{% url 'dashboard:startup' %}#dp-advisors"><i class="ti ti-user-check"></i> المستشارون</a>
+          <a href="{% url 'dashboard:startup' %}#dp-deals"><i class="ti ti-handshake"></i> الصفقات</a>
+        {% elif request.user.role == 'investor' %}
+        <a href="{% url 'dashboard:investor' %}"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+         <a href="#hero" class="active">الرئيسية</a>
+          <a href="{% url 'dashboard:investor' %}?page=browse"><i class="ti ti-search"></i> استكشاف الشركات</a>
+<a href="{% url 'dashboard:investor' %}?page=portfolio"><i class="ti ti-briefcase"></i> محفظتي</a>
+<a href="{% url 'dashboard:investor' %}?page=deals"><i class="ti ti-handshake"></i> صفقاتي</a>
+<a href="{% url 'dashboard:investor' %}?page=reports"><i class="ti ti-chart-line"></i> التقارير</a>
+        {% endif %}
+      {% else %}
+        <a href="#hero">الرئيسية</a>
+        <a href="{% url 'core:public_startups' %}">الشركات</a>
+        <a href="{% url 'core:public_investors' %}">المستثمرين</a>
+        <a href="{% url 'core:public_advisors' %}">المستشارون</a>
+        <a href="{% url 'core:contact' %}">تواصل معنا</a>
+      {% endif %}
+    </nav>
+
+    <div class="header-actions"> 
+      <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
+        <span class="theme-icon light-icon">N</span>
+        <span class="theme-icon dark-icon">D</span>
+      </button>
+      {% if request.user.is_authenticated %}
+        <span class="user-pill">
+          <i class="ti ti-user-circle"></i>
+          {{ request.user.first_name|default:request.user.username }}
+          <span class="role-tag">
+            {% if request.user.role == 'advisor' %}مستشار
+            {% elif request.user.role == 'startup' %}شركة ناشئة
+            {% elif request.user.role == 'investor' %}مستثمر
+            {% endif %}
+          </span>
+        </span>
+        <a href="{% url 'accounts:logout' %}" class="btn btn-primary"><i class="ti ti-logout"></i> تسجيل الخروج</a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-ghost">تسجيل الدخول</a>
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary">ابدأ الآن</a>
+      {% endif %}
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+
+  {# MOBILE MENU — نفس المنطق #}
+  <div class="mobile-menu" id="mobileMenu">
+    <nav>
+      {% if request.user.is_authenticated %}
+        {% if request.user.role == 'advisor' %}
+          <a href="{% url 'dashboard:advisor' %}" class="mobile-link"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-requests" class="mobile-link"><i class="ti ti-inbox"></i> طلبات الخدمات</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-active" class="mobile-link"><i class="ti ti-loader"></i> جاري التنفيذ</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-done" class="mobile-link"><i class="ti ti-circle-check"></i> المكتملة</a>
+          <a href="{% url 'profiles:advisor_edit' %}" class="mobile-link"><i class="ti ti-user-check"></i> ملفي المهني</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-earnings" class="mobile-link"><i class="ti ti-wallet"></i> الأرباح</a>
+          <a href="{% url 'dashboard:advisor' %}#dp-settings" class="mobile-link"><i class="ti ti-settings"></i> الإعدادات</a>
+        {% elif request.user.role == 'startup' %}
+          <a href="{% url 'dashboard:startup' %}" class="mobile-link"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+          <a href="{% url 'dashboard:startup' %}#dp-profile" class="mobile-link"><i class="ti ti-building"></i> ملف الشركة</a>
+          <a href="{% url 'dashboard:startup' %}#dp-investors" class="mobile-link"><i class="ti ti-users"></i> المستثمرون</a>
+          <a href="{% url 'dashboard:startup' %}#dp-advisors" class="mobile-link"><i class="ti ti-user-check"></i> المستشارون</a>
+          <a href="{% url 'dashboard:startup' %}#dp-deals" class="mobile-link"><i class="ti ti-handshake"></i> الصفقات</a>
+        {% elif request.user.role == 'investor' %}
+          <a href="{% url 'dashboard:investor' %}" class="mobile-link"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+          <a href="{% url 'core:public_startups' %}" class="mobile-link"><i class="ti ti-search"></i> استكشاف الشركات</a>
+          <a href="{% url 'deals:portfolio' %}" class="mobile-link"><i class="ti ti-briefcase"></i> محفظتي</a>
+          <a href="{% url 'deals:my_deals' %}" class="mobile-link"><i class="ti ti-handshake"></i> صفقاتي</a>
+          <a href="{% url 'post_investment:investor_reports' %}" class="mobile-link"><i class="ti ti-chart-line"></i> التقارير</a>
+        {% endif %}
+        <div class="mobile-actions">
+          <a href="{% url 'accounts:logout' %}" class="btn btn-primary w-full">تسجيل الخروج</a>
+        </div>
+      {% else %}
+  
+        <a href="#hero" class="mobile-link">الرئيسية</a>
+        <a href="{% url 'core:public_startups' %}" class="mobile-link">للشركات الناشئة</a>
+        <a href="{% url 'core:public_investors' %}" class="mobile-link">للمستثمرين</a>
+        <a href="{% url 'core:public_advisors' %}" class="mobile-link">المستشارون</a>
+        <a href="{% url 'core:contact' %}" class="mobile-link">تواصل معنا</a>
+        <div class="mobile-actions">
+          <a href="{% url 'accounts:login' %}" class="btn btn-ghost w-full">تسجيل الدخول</a>
+          <a href="{% url 'accounts:register' %}" class="btn btn-primary w-full">ابدأ الآن</a>
+        </div>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+
+
+{% if not request.user.is_authenticated %}
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-shapes">
+    <div class="shape shape-1"></div><div class="shape shape-2"></div><div class="shape shape-3"></div>
+  </div>
+  <div class="container hero-inner">
+    <div class="hero-content fade-up">
+      <div class="hero-badge"><span class="badge-dot"></span>منصة سعودية لربط رأس المال بالفرص الواعدة</div>
+      <h1 class="hero-title">رابط بين الشركات الناشئة<br/>والمستثمرين والمستشارين<br/><span class="gradient-text">من الإنطلاقة الأولى إلى استثمار ناجح</span></h1>
+      <p class="hero-desc">منصة سعودية تربط الشركات الناشئة بالمستثمرين والمستشارين، تساعد الشركات على تجهيز فرصها الاستثمارية، وتمكّن المستثمرين من الوصول إلى فرص موثوقة ومنظمة، بدعم من مستشارين متخصصين داخل بيئة واضحة وآمنة.</p>
+      <div class="hero-buttons">
+        <a href="{% url 'accounts:register' %}?role=startup" class="btn btn-primary btn-lg">ابدأ كشركة ناشئة</a>
+        <a href="#how-it-works" class="btn btn-outline btn-lg">كيف تعمل</a>
+        <a href="#featured" class="btn btn-ghost btn-lg">شاهد نموذج الملف</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong>+200</strong><span>شركة ناشئة</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>+85</strong><span>مستثمر نشط</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>+40</strong><span>صفقة مكتملة</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'partials/hp_problem.html' %}
+{% include 'partials/hp_solution.html' %}
+{% include 'partials/hp_howitworks.html' %}
+{% include 'partials/hp_startups.html' %}
+{% include 'partials/hp_investors.html' %}
+{% include 'partials/hp_advisors.html' %}
+{% include 'partials/hp_featured.html' %}
+{% include 'partials/hp_success.html' %}
+{% include 'partials/hp_protection.html' %}
+{% include 'partials/hp_services.html' %}
+{% include 'partials/hp_pricing.html' %}
+{% include 'partials/hp_faq.html' %}
+
+<!-- CTA -->
+<section class="section cta-section">
+  <div class="container">
+    <div class="cta-inner fade-up">
+      <div class="cta-glow"></div>
+      <h2 class="cta-title">جاهز تبدأ رحلتك الاستثمارية؟</h2>
+      <p class="cta-desc">سجل شركتك اليوم مجانًا وابدأ بناء ملفك الاستثماري في أقل من 10 دقائق</p>
+      <div class="cta-buttons">
+        <a href="{% url 'accounts:register' %}?role=startup" class="btn btn-white btn-lg">ابدأ كشركة ناشئة — مجانًا</a>
+        <a href="{% url 'accounts:register' %}?role=investor" class="btn btn-outline-white btn-lg">سجل كمستثمر</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% else %}
+
+<section class="welcome-back-section">
+  <div class="container">
+    <div class="welcome-card fade-up">
+      <div class="welcome-icon">
+        {% if request.user.role == 'advisor' %}
+        {% elif request.user.role == 'startup' %}
+        {% elif request.user.role == 'investor' %}
+        {% endif %}
+      </div>
+      <h1 class="welcome-title">مرحباً بعودتك، {{ request.user.first_name|default:request.user.username }} 👋</h1>
+      <p class="welcome-desc">
+        {% if request.user.role == 'advisor' %}تابع طلبات الخدمات وخدماتك الجارية من لوحة التحكم
+        {% elif request.user.role == 'startup' %}تابع ملف شركتك وتفاعلات المستثمرين معك
+        {% elif request.user.role == 'investor' %}استكشف الشركات الناشئة وتابع محفظتك الاستثمارية
+        {% endif %}
+      </p>
+      <div class="welcome-actions">
+        {% if request.user.role == 'advisor' %}
+          <a href="{% url 'dashboard:advisor' %}" class="btn btn-primary btn-lg"><i class="ti ti-layout-dashboard"></i> اذهب للوحة التحكم</a>
+          <a href="{% url 'profiles:advisor_edit' %}" class="btn btn-outline btn-lg"><i class="ti ti-user-check"></i> ملفي المهني</a>
+        {% elif request.user.role == 'startup' %}
+          <a href="{% url 'dashboard:startup' %}" class="btn btn-primary btn-lg"><i class="ti ti-layout-dashboard"></i> اذهب للوحة التحكم</a>
+        {% elif request.user.role == 'investor' %}
+          <a href="{% url 'dashboard:investor' %}" class="btn btn-primary btn-lg"><i class="ti ti-layout-dashboard"></i> اذهب للوحة التحكم</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endif %}
+
+<!-- FOOTER -->
+{% include 'partials/footer.html' %}
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Homepage-specific styles  */
+.problem-section{background:var(--bg-alt,var(--bg2))}
+.solution-section,.startups-section,.advisors-section,.protection-section,.pricing-section{background:var(--bg)}
+.how-section,.investors-section,.services-section,.faq-section{background:var(--bg2)}
+.featured-section{background:linear-gradient(160deg,var(--bg2) 0%,var(--bg) 100%)}
+.success-section{background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);position:relative;overflow:hidden}
+.success-section::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,var(--primary-glow),transparent);pointer-events:none}
+.cta-section{background:var(--bg);padding:72px 0}
+.cta-inner{background:linear-gradient(135deg,#1D4ED8 0%,#2563EB 55%,#1D4ED8 100%);border-radius:22px;padding:64px 44px;text-align:center;position:relative;overflow:hidden}
+.cta-glow{position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.cta-title{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:900;color:#fff;margin-bottom:12px}
+.cta-desc{font-size:1rem;color:rgba(255,255,255,.8);margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+@media(max-width:640px){.cta-inner{padding:44px 22px}}
+
+
+
+.user-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.18);border-radius:99px;font-size:.85rem;font-weight:700;color:#1D4ED8}
+.user-pill i{font-size:1.1rem}
+.user-pill .role-tag{background:#1D4ED8;color:#fff;padding:2px 8px;border-radius:99px;font-size:.7rem;font-weight:700;margin-right:4px}
+
+.welcome-back-section{background:linear-gradient(145deg,#020617 0%,#0b1120 50%,#0f1729 100%);min-height:60vh;display:flex;align-items:center;padding:80px 0;position:relative;overflow:hidden}
+.welcome-back-section::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.18),transparent);top:-200px;right:-200px;pointer-events:none}
+.welcome-back-section::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.15),transparent);bottom:-150px;left:-100px;pointer-events:none}
+.welcome-card{text-align:center;color:#fff;position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 20px}
+.welcome-icon{font-size:5rem;margin-bottom:20px;filter:drop-shadow(0 8px 20px rgba(99,102,241,.4))}
+.welcome-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;color:#fff;margin-bottom:14px}
+.welcome-desc{font-size:1.05rem;color:rgba(255,255,255,.75);margin-bottom:32px;line-height:1.75}
+.welcome-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.welcome-actions .btn-primary{background:linear-gradient(135deg,#4F46E5,#7C3AED);border:none;box-shadow:0 8px 24px rgba(79,70,229,.4)}
+.welcome-actions .btn-outline{border:1.5px solid rgba(255,255,255,.25);color:#fff;background:transparent}
+.welcome-actions .btn-outline:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.4)}
+@media(max-width:640px){.user-pill{display:none}.welcome-icon{font-size:3.5rem}}
+</style>
+{% endblock %}

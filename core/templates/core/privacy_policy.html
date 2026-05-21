@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}سياسة الخصوصية — رابط RABIT{% endblock %}
+{% block body %}
+{% include 'partials/_public_header.html' %}
+
+<style>
+.legal-hero{padding:64px 0 48px;background:linear-gradient(145deg,#020617 0%,#0b1120 60%,#0f1729 100%);position:relative;overflow:hidden;text-align:center}
+.legal-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(37,99,235,.18),transparent 55%)}
+.legal-hero-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
+.legal-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);padding:6px 16px;border-radius:100px;font-size:.82rem;font-weight:700;margin-bottom:18px}
+.legal-hero h1{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:900;color:#fff;margin-bottom:12px}
+.legal-hero p{color:rgba(255,255,255,.6);font-size:.95rem;line-height:1.75}
+.legal-meta{display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap}
+.legal-meta span{display:flex;align-items:center;gap:6px;font-size:.8rem;color:rgba(255,255,255,.5)}
+
+.legal-layout{display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:start;padding:56px 0}
+@media(max-width:860px){.legal-layout{grid-template-columns:1fr}}
+
+.legal-toc{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:20px;position:sticky;top:90px}
+.legal-toc h4{font-size:.85rem;font-weight:800;color:var(--dk);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--bd)}
+.legal-toc a{display:block;font-size:.82rem;color:var(--muted);padding:6px 10px;border-radius:6px;transition:all var(--t);margin-bottom:2px}
+.legal-toc a:hover,.legal-toc a.active{background:var(--pg);color:var(--primary)}
+
+.legal-content{max-width:100%}
+.legal-section{margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid var(--bd)}
+.legal-section:last-child{border-bottom:none}
+.legal-section h2{font-size:1.2rem;font-weight:800;color:var(--dk);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.legal-section h2 .sec-num{width:28px;height:28px;background:var(--pg);color:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;flex-shrink:0}
+.legal-section p{font-size:.93rem;color:var(--tx);line-height:1.85;margin-bottom:12px}
+.legal-section ul{padding-right:20px;margin-bottom:12px}
+.legal-section ul li{font-size:.93rem;color:var(--tx);line-height:1.85;margin-bottom:6px}
+.legal-highlight{background:var(--pg2);border:1px solid rgba(37,99,235,.15);border-radius:var(--r2);padding:16px 18px;margin-bottom:16px}
+.legal-highlight p{margin:0;font-size:.88rem;color:var(--tx)}
+.legal-highlight strong{color:var(--primary)}
+
+@media(max-width:860px){.legal-toc{display:none}}
+</style>
+
+<section class="legal-hero">
+  <div class="container legal-hero-inner">
+    <div class="legal-badge"><i class="ti ti-shield-lock"></i> قانوني</div>
+    <h1>سياسة الخصوصية</h1>
+    <p>نلتزم بحماية بياناتك الشخصية والحفاظ على خصوصيتك بأعلى معايير الأمان</p>
+    <div class="legal-meta">
+      <span><i class="ti ti-calendar"></i> آخر تحديث: يناير 2024</span>
+      <span><i class="ti ti-map-pin"></i> المملكة العربية السعودية</span>
+      <span><i class="ti ti-clock"></i> وقت القراءة: 5 دقائق</span>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0">
+  <div class="container">
+    <div class="legal-layout">
+
+      <!-- TOC -->
+      <aside class="legal-toc">
+        <h4><i class="ti ti-list"></i> المحتويات</h4>
+        <a href="#s1">المعلومات التي نجمعها</a>
+        <a href="#s2">كيف نستخدم بياناتك</a>
+        <a href="#s3">مشاركة البيانات</a>
+        <a href="#s4">حماية البيانات</a>
+        <a href="#s5">ملفات تعريف الارتباط</a>
+        <a href="#s6">حقوقك</a>
+        <a href="#s7">التواصل معنا</a>
+      </aside>
+
+      <!-- Content -->
+      <div class="legal-content">
+
+       <div class="legal-highlight">
+  <p>
+    <i class="fa-solid fa-shield-halved"></i>
+    <strong>ملخص سريع:</strong>
+    رابط RABIT لا تبيع بياناتك الشخصية لأي طرف ثالث. نجمع فقط ما نحتاجه لتشغيل الخدمة وحماية مجتمعنا الاستثماري.
+  </p>
+</div>
+
+        <div class="legal-section" id="s1">
+          <h2><span class="sec-num">1</span> المعلومات التي نجمعها</h2>
+          <p>عند التسجيل في منصة رابط، نجمع المعلومات التالية:</p>
+          <ul>
+            <li><strong>معلومات الحساب:</strong> الاسم الكامل، البريد الإلكتروني، رقم الهاتف، الدور (شركة / مستثمر / مستشار)</li>
+            <li><strong>معلومات الملف الشخصي:</strong> بيانات الشركة، المرحلة، القطاع، المدينة، التفاصيل المالية</li>
+            <li><strong>وثائق KYC للمستثمرين:</strong> الهوية الوطنية، إثبات النشاط الاستثماري، السجل التجاري</li>
+            <li><strong>بيانات الاستخدام:</strong> سجلات الوصول، أوقات الجلسات، الصفحات المزارة</li>
+            <li><strong>معلومات الجهاز:</strong> عنوان IP، نوع المتصفح، نظام التشغيل</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="s2">
+          <h2><span class="sec-num">2</span> كيف نستخدم بياناتك</h2>
+          <p>نستخدم معلوماتك للأغراض التالية:</p>
+          <ul>
+            <li>تشغيل وتحسين خدمات منصة رابط</li>
+            <li>مطابقة الشركات الناشئة مع المستثمرين المناسبين</li>
+            <li>التحقق من هوية المستثمرين (KYC) وضمان بيئة استثمارية آمنة</li>
+            <li>إرسال الإشعارات المتعلقة بنشاطك على المنصة</li>
+            <li>الامتثال للمتطلبات القانونية والتنظيمية في المملكة العربية السعودية</li>
+            <li>منع الاحتيال وحماية مجتمع المنصة</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="s3">
+          <h2><span class="sec-num">3</span> مشاركة البيانات</h2>
+          <p>لا نبيع بياناتك الشخصية. قد نشارك معلوماتك في الحالات التالية فقط:</p>
+          <ul>
+            <li><strong>بموافقتك الصريحة:</strong> عند توقيع اتفاقية NDA مع طرف آخر</li>
+            <li><strong>متطلبات قانونية:</strong> الامتثال لأوامر المحاكم أو الجهات التنظيمية السعودية</li>
+            <li><strong>مزودو الخدمات:</strong> شركاء تقنيون موثوقون يساعدوننا في تشغيل المنصة (ملزمون بسياسات صارمة)</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="s4">
+          <h2><span class="sec-num">4</span> حماية البيانات</h2>
+          <p>نطبّق أعلى معايير الأمان لحماية بياناتك:</p>
+          <ul>
+            <li>تشفير SSL/TLS لجميع البيانات المنقولة</li>
+            <li>Data Room محمية بصلاحيات متعددة المستويات</li>
+            <li>Watermark تلقائي على جميع المستندات</li>
+            <li>سجل وصول كامل لكل عملية داخل المنصة</li>
+            <li>اتفاقية NDA إلزامية قبل الوصول للبيانات الحساسة</li>
+            <li>مراجعات أمنية دورية للبنية التحتية</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="s5">
+          <h2><span class="sec-num">5</span> ملفات تعريف الارتباط (Cookies)</h2>
+          <p>نستخدم ملفات تعريف الارتباط للأغراض التالية:</p>
+          <ul>
+            <li><strong>ضرورية:</strong> الجلسات وتسجيل الدخول والأمان</li>
+            <li><strong>وظيفية:</strong> تذكّر تفضيلاتك وإعداداتك</li>
+            <li><strong>تحليلية:</strong> فهم كيفية استخدام المنصة لتحسين التجربة</li>
+          </ul>
+          <p>يمكنك إدارة ملفات الارتباط من إعدادات متصفحك في أي وقت.</p>
+        </div>
+
+        <div class="legal-section" id="s6">
+          <h2><span class="sec-num">6</span> حقوقك</h2>
+          <p>وفقاً للأنظمة المعمول بها في المملكة العربية السعودية، لديك الحق في:</p>
+          <ul>
+            <li>الاطلاع على البيانات الشخصية التي نحتفظ بها عنك</li>
+            <li>طلب تصحيح أي معلومات غير دقيقة</li>
+            <li>طلب حذف حسابك وبياناتك (مع مراعاة المتطلبات القانونية)</li>
+            <li>الاعتراض على معالجة بياناتك لأغراض تسويقية</li>
+          </ul>
+          <p>لممارسة أي من هذه الحقوق، تواصل معنا عبر: <strong>rabitplatform@gmail.com</strong></p>
+        </div>
+
+        <div class="legal-section" id="s7">
+          <h2><span class="sec-num">7</span> التواصل معنا</h2>
+          <p>لأي استفسار حول سياسة الخصوصية أو بياناتك الشخصية:</p>
+          <ul>
+            <li>البريد الإلكتروني: <strong>rabitplatform@gmail.com</strong></li>
+            <li>الموقع: الرياض، المملكة العربية السعودية</li>
+          </ul>
+          <a href="{% url 'core:contact' %}" class="btn btn-primary" style="margin-top:8px">
+            <i class="ti ti-mail"></i> تواصل مع الفريق
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'partials/footer.html' %}
+<script src="{% static 'js/rabit.js' %}"></script>
+{% endblock %}

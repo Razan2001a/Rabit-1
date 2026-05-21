@@ -1,0 +1,76 @@
+{# Unified advisor sidebar — use on dashboard + advisory pages #}
+{% with ap=advisor_profile %}
+{% if ap %}
+<div class="db-score-block">
+  <div class="db-score-row">
+    <span class="db-score-lbl">التقييم</span>
+    <span class="db-score-num">{% if ap.rating > 0 %}{{ ap.rating }}/5.0{% else %}لا يوجد تقييم{% endif %}</span>
+  </div>
+  <div class="db-track"><div class="db-fill" data-width="{% widthratio ap.rating 5 100 %}%"></div></div>
+  <div class="db-score-hint">{{ ap.services_count }} خدمة منجزة</div>
+  <div class="db-status-lozenge {% if ap.is_available %}st-ready{% else %}st-draft{% endif %}">
+    <i class="ti ti-circle-dot" style="font-size:.65rem"></i>
+    {% if ap.is_available %}متاح للعمل{% else %}غير متاح{% endif %}
+  </div>
+</div>
+{% endif %}
+
+<div class="db-nav-s">الرئيسية</div>
+<div class="db-nav-g">
+  {% if nav_mode == 'spa' %}
+  <button class="db-na {% if active_nav == 'home' %}on{% endif %}" data-page="home"><i class="ti ti-layout-dashboard"></i><span class="db-na-lbl">لوحة التحكم</span></button>
+  {% else %}
+  <a href="{% url 'dashboard:advisor' %}" class="db-na {% if active_nav == 'home' %}on{% endif %}"><i class="ti ti-layout-dashboard"></i><span class="db-na-lbl">لوحة التحكم</span></a>
+  {% endif %}
+</div>
+
+<div class="db-nav-s">الخدمات</div>
+<div class="db-nav-g">
+  <a href="{% url 'advisory:my_requests' %}" class="db-na {% if active_nav == 'requests' %}on{% endif %}">
+    <i class="ti ti-inbox"></i><span class="db-na-lbl">طلبات الخدمات</span>
+    {% if advisor_pending %}<span class="db-na-badge nb-wn">{{ advisor_pending }}</span>{% endif %}
+  </a>
+  {% if nav_mode == 'spa' %}
+  <button class="db-na {% if active_nav == 'active' %}on{% endif %}" data-page="active"><i class="ti ti-loader"></i><span class="db-na-lbl">جاري التنفيذ</span>{% if advisor_active %}<span class="db-na-badge nb-p">{{ advisor_active }}</span>{% endif %}</button>
+  <button class="db-na {% if active_nav == 'done' %}on{% endif %}" data-page="done"><i class="ti ti-circle-check"></i><span class="db-na-lbl">المكتملة</span><span class="db-na-badge nb-ok">{{ advisor_done }}</span></button>
+  <button class="db-na {% if active_nav == 'services' %}on{% endif %}" data-page="services"><i class="ti ti-list-check"></i><span class="db-na-lbl">خدماتي</span>{% if advisor_services_n %}<span class="db-na-badge nb-p">{{ advisor_services_n }}</span>{% endif %}</button>
+  {% else %}
+  <a href="{% url 'dashboard:advisor' %}?page=active" class="db-na {% if active_nav == 'active' %}on{% endif %}"><i class="ti ti-loader"></i><span class="db-na-lbl">جاري التنفيذ</span>{% if advisor_active %}<span class="db-na-badge nb-p">{{ advisor_active }}</span>{% endif %}</a>
+  <a href="{% url 'dashboard:advisor' %}?page=done" class="db-na {% if active_nav == 'done' %}on{% endif %}"><i class="ti ti-circle-check"></i><span class="db-na-lbl">المكتملة</span><span class="db-na-badge nb-ok">{{ advisor_done }}</span></a>
+  <a href="{% url 'dashboard:advisor' %}?page=services" class="db-na {% if active_nav == 'services' %}on{% endif %}"><i class="ti ti-list-check"></i><span class="db-na-lbl">خدماتي</span>{% if advisor_services_n %}<span class="db-na-badge nb-p">{{ advisor_services_n }}</span>{% endif %}</a>
+  {% endif %}
+  <a href="{% url 'advisory:add_service' %}" class="db-na {% if active_nav == 'add_service' %}on{% endif %}"><i class="ti ti-plus"></i><span class="db-na-lbl">إضافة خدمة</span></a>
+</div>
+
+<div class="db-nav-s">الملف المهني</div>
+<div class="db-nav-g">
+  {% if nav_mode == 'spa' %}
+  <button class="db-na {% if active_nav == 'profile' %}on{% endif %}" data-page="profile"><i class="ti ti-user-check"></i><span class="db-na-lbl">ملفي المهني</span></button>
+  <button class="db-na {% if active_nav == 'availability' %}on{% endif %}" data-page="availability"><i class="ti ti-calendar"></i><span class="db-na-lbl">التوافر والجدول</span></button>
+  <button class="db-na {% if active_nav == 'earnings' %}on{% endif %}" data-page="earnings"><i class="ti ti-wallet"></i><span class="db-na-lbl">الأرباح</span></button>
+  {% else %}
+  <a href="{% url 'dashboard:advisor' %}?page=profile" class="db-na {% if active_nav == 'profile' %}on{% endif %}"><i class="ti ti-user-check"></i><span class="db-na-lbl">ملفي المهني</span></a>
+  <a href="{% url 'profiles:advisor_edit' %}" class="db-na"><i class="ti ti-edit"></i><span class="db-na-lbl">تعديل الملف</span></a>
+  <a href="{% url 'dashboard:advisor' %}?page=earnings" class="db-na {% if active_nav == 'earnings' %}on{% endif %}"><i class="ti ti-wallet"></i><span class="db-na-lbl">الأرباح</span></a>
+  {% endif %}
+  <a href="{% url 'profiles:advisor_bank_account' %}" class="db-na"><i class="ti ti-building-bank"></i><span class="db-na-lbl">الحساب البنكي</span></a>
+</div>
+
+<div class="db-nav-s">التواصل</div>
+<div class="db-nav-g">
+  <a href="{% url 'messaging:startup_advisor_conversations' %}" class="db-na {% if active_nav == 'conversations' %}on{% endif %}">
+    <i class="ti ti-messages"></i><span class="db-na-lbl">المحادثات</span>
+    {% if advisor_convo_count %}<span class="db-na-badge nb-ok">{{ advisor_convo_count }}</span>{% endif %}
+  </a>
+  <a href="{% url 'payments:index' %}" class="db-na"><i class="ti ti-credit-card"></i><span class="db-na-lbl">المدفوعات</span></a>
+</div>
+
+<div class="db-nav-s">الإعدادات</div>
+<div class="db-nav-g">
+  {% if nav_mode == 'spa' %}
+  <button class="db-na {% if active_nav == 'settings' %}on{% endif %}" data-page="settings"><i class="ti ti-settings"></i><span class="db-na-lbl">الإعدادات</span></button>
+  {% else %}
+  <a href="{% url 'dashboard:advisor' %}?page=settings" class="db-na {% if active_nav == 'settings' %}on{% endif %}"><i class="ti ti-settings"></i><span class="db-na-lbl">الإعدادات</span></a>
+  {% endif %}
+</div>
+{% endwith %}

@@ -1,0 +1,52 @@
+<!-- PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-badge">الأسعار</div>
+      <h2 class="section-title">ابدأ مجانًا وادفع فقط عند النجاح</h2>
+      <p class="section-desc">لا رسوم اشتراك شهرية — رسوم خدمات حسب الطلب ورسوم إغلاق ثابتة عند إتمام الصفقة</p>
+    </div>
+    <div class="pricing-grid fade-up delay-100">
+      <div class="pricing-card">
+        <div class="pc-header"><div class="pc-plan">Start</div><div class="pc-price">مجاني</div><div class="pc-desc">للشركات التي تبدأ رحلتها الاستثمارية</div></div>
+        <ul class="pc-features">
+          <li><span class="pc-check">✓</span> إنشاء حساب الشركة</li>
+          <li><span class="pc-check">✓</span> بناء الملف الأساسي</li>
+          <li><span class="pc-check">✓</span> رفع Pitch Deck</li>
+          <li><span class="pc-check">✓</span> Scorecard الأساسي</li>
+          <li><span class="pc-check">✓</span> Data Room بسيطة (5 ملفات)</li>
+          <li class="pc-muted"><span class="pc-x">✗</span> Investor Matching</li>
+          <li class="pc-muted"><span class="pc-x">✗</span> Deal Room</li>
+        </ul>
+        <a href="{% url 'accounts:register' %}?role=startup" class="btn btn-outline w-full">ابدأ مجانًا</a>
+      </div>
+      <div class="pricing-card pricing-card--featured">
+        <div class="pc-ribbon">الأكثر طلبًا</div>
+        <div class="pc-header"><div class="pc-plan">Growth</div><div class="pc-price">حسب الخدمة</div><div class="pc-desc">خدمات استشارية مخصصة للشركات الجاهزة</div></div>
+        <ul class="pc-features">
+          <li><span class="pc-check">✓</span> كل مزايا Start</li>
+          <li><span class="pc-check">✓</span> Quick Due Diligence كامل</li>
+          <li><span class="pc-check">✓</span> Data Room كاملة غير محدودة</li>
+          <li><span class="pc-check">✓</span> Investor Matching ذكي</li>
+          <li><span class="pc-check">✓</span> اتفاقية عدم الإفصاح إلكترونية تلقائية</li>
+          <li><span class="pc-check">✓</span> خدمات استشارية (حسب الطلب)</li>
+          <li class="pc-muted"><span class="pc-x">✗</span> Deal Room</li>
+        </ul>
+        <a href="#services" class="btn btn-primary w-full">استكشف الخدمات</a>
+      </div>
+      <div class="pricing-card">
+        <div class="pc-header"><div class="pc-plan">Deal Ready</div><div class="pc-price"><span class="pc-commission">5,000</span> ريال</div><div class="pc-desc">للشركات الجاهزة لإغلاق صفقتها الاستثمارية</div></div>
+        <ul class="pc-features">
+          <li><span class="pc-check">✓</span> كل مزايا Growth</li>
+          <li><span class="pc-check">✓</span> Deal Room كاملة</li>
+          <li><span class="pc-check">✓</span> Closing Checklist</li>
+          <li><span class="pc-check">✓</span> توقيع رقمي للعقود</li>
+          <li><span class="pc-check">✓</span> Post-Investment Reports</li>
+          <li><span class="pc-check">✓</span> دعم مخصص حتى الإغلاق</li>
+          <li><span class="pc-check">✓</span> اشتراك ما بعد الاستثمار (اختياري)</li>
+        </ul>
+        <a href="{% url 'accounts:login' %}" class="btn btn-outline w-full">تواصل معنا</a>
+      </div>
+    </div>
+  </div>
+</section>

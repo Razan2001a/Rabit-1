@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# Environment variables (never commit secrets)
+.env
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+static_collected/
+
+# IDE / OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Non-code files
+FINAL_SEND_TEAM_AR.md
+INSTALL.md
+README_SEND.txt
+*.zip
+اقرأني_التيم.md
+تعليمات.txt
+run.ps1
+setup.bat
+setup.ps1
+start.bat
+start.ps1
+*.bat
+scripts/

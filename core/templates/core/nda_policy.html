@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}اتفاقية عدم الإفصاح — رابط RABIT{% endblock %}
+{% block body %}
+{% include 'partials/_public_header.html' %}
+
+<style>
+.legal-hero{padding:64px 0 48px;background:linear-gradient(145deg,#020617 0%,#0b1120 60%,#0f1729 100%);position:relative;overflow:hidden;text-align:center}
+.legal-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 65% 40%,rgba(37,99,235,.25),transparent 55%)}
+.legal-hero-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
+.legal-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);padding:6px 16px;border-radius:100px;font-size:.82rem;font-weight:700;margin-bottom:18px}
+.legal-hero h1{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:900;color:#fff;margin-bottom:12px}
+.legal-hero p{color:rgba(255,255,255,.6);font-size:.95rem;line-height:1.75}
+.legal-meta{display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap}
+.legal-meta span{display:flex;align-items:center;gap:6px;font-size:.8rem;color:rgba(255,255,255,.5)}
+.legal-layout{display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:start;padding:56px 0}
+@media(max-width:860px){.legal-layout{grid-template-columns:1fr}}
+.legal-toc{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:20px;position:sticky;top:90px}
+.legal-toc h4{font-size:.85rem;font-weight:800;color:var(--dk);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--bd)}
+.legal-toc a{display:block;font-size:.82rem;color:var(--muted);padding:6px 10px;border-radius:6px;transition:all var(--t);margin-bottom:2px}
+.legal-toc a:hover{background:var(--pg);color:var(--primary)}
+.legal-content{max-width:100%}
+.legal-section{margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid var(--bd)}
+.legal-section:last-child{border-bottom:none}
+.legal-section h2{font-size:1.2rem;font-weight:800;color:var(--dk);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.legal-section h2 .sec-num{width:28px;height:28px;background:var(--pg);color:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;flex-shrink:0}
+.legal-section p{font-size:.93rem;color:var(--tx);line-height:1.85;margin-bottom:12px}
+.legal-section ul{padding-right:20px;margin-bottom:12px}
+.legal-section ul li{font-size:.93rem;color:var(--tx);line-height:1.85;margin-bottom:6px}
+.legal-highlight{background:var(--pg2);border:1px solid rgba(37,99,235,.15);border-radius:var(--r2);padding:16px 18px;margin-bottom:16px}
+.legal-highlight p{margin:0;font-size:.88rem;color:var(--tx)}
+.legal-highlight strong{color:var(--primary)}
+.nda-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:20px 0}
+.nda-step{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:20px;text-align:center}
+.nda-step-num{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--pu));border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.9rem;margin:0 auto 12px}
+.nda-step h4{font-size:.88rem;font-weight:800;color:var(--dk);margin-bottom:6px}
+.nda-step p{font-size:.78rem;color:var(--muted);margin:0}
+@media(max-width:860px){.legal-toc{display:none}}
+</style>
+
+<section class="legal-hero">
+  <div class="container legal-hero-inner">
+    <div class="legal-badge"><i class="ti ti-file-certificate"></i> قانوني</div>
+    <h1>سياسة اتفاقية عدم الإفصاح<br/><span style="font-size:.7em;opacity:.8">(Non-Disclosure Agreement — NDA)</span></h1>
+    <p>الإطار القانوني الذي يحكم حماية المعلومات السرية بين جميع أطراف منصة رابط</p>
+    <div class="legal-meta">
+      <span><i class="ti ti-calendar"></i> آخر تحديث: يناير 2024</span>
+      <span><i class="ti ti-clock"></i> صلاحية الـ NDA: 90 يوم</span>
+      <span><i class="ti ti-map-pin"></i> المملكة العربية السعودية</span>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0">
+  <div class="container">
+    <div class="legal-layout">
+
+      <aside class="legal-toc">
+        <h4><i class="ti ti-list"></i> المحتويات</h4>
+        <a href="#n1">ما هو الـ NDA في رابط؟</a>
+        <a href="#n2">آلية توقيع الـ NDA</a>
+        <a href="#n3">المعلومات المحمية</a>
+        <a href="#n4">التزامات المستثمر</a>
+        <a href="#n5">التزامات الشركة</a>
+        <a href="#n6">مدة الاتفاقية</a>
+        <a href="#n7">انتهاك الاتفاقية</a>
+        <a href="#n8">الاستثناءات</a>
+      </aside>
+
+      <div class="legal-content">
+
+        <div class="legal-highlight">
+          <p>🛡️ <strong>حماية متبادلة:</strong> اتفاقية NDA في رابط تحمي الشركة الناشئة من تسريب بياناتها، وتحمي المستثمر من المسؤولية القانونية عند الاطلاع على معلومات سرية. كلا الطرفين محمي.</p>
+        </div>
+
+        <div class="legal-section" id="n1">
+          <h2><span class="sec-num">1</span> ما هو الـ NDA في منصة رابط؟</h2>
+          <p>اتفاقية عدم الإفصاح (NDA) هي اتفاقية قانونية رقمية إلزامية يُوقّعها المستثمر قبل الوصول إلى البيانات التفصيلية لأي شركة ناشئة مدرجة على المنصة. تُنشأ الاتفاقية تلقائياً داخل المنصة وتُحفظ رقمياً.</p>
+          <p>يشمل الـ NDA في رابط ثلاثة أطراف: <strong>الشركة الناشئة</strong> (الطرف المُفصِح)، <strong>المستثمر</strong> (الطرف المتلقّي)، و<strong>منصة رابط</strong> (الوسيط الحافظ للاتفاقية).</p>
+        </div>
+
+        <div class="legal-section" id="n2">
+          <h2><span class="sec-num">2</span> آلية توقيع الـ NDA</h2>
+          <div class="nda-flow">
+            <div class="nda-step">
+              <div class="nda-step-num">1</div>
+              <h4>اكتشاف الشركة</h4>
+              <p>المستثمر يتصفح الشركات المدرجة ويرى البيانات الأساسية فقط</p>
+            </div>
+            <div class="nda-step">
+              <div class="nda-step-num">2</div>
+              <h4>طلب الوصول</h4>
+              <p>يضغط "وقّع NDA واطّلع" للوصول للبيانات التفصيلية</p>
+            </div>
+            <div class="nda-step">
+              <div class="nda-step-num">3</div>
+              <h4>توقيع رقمي</h4>
+              <p>يقرأ الاتفاقية ويوقّعها إلكترونياً بكتابة اسمه والموافقة</p>
+            </div>
+            <div class="nda-step">
+              <div class="nda-step-num">4</div>
+              <h4>وصول كامل</h4>
+              <p>تُكشف جميع بيانات الشركة وتبدأ مرحلة التفاوض</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="legal-section" id="n3">
+          <h2><span class="sec-num">3</span> المعلومات المحمية بموجب الـ NDA</h2>
+          <ul>
+            <li>البيانات المالية التفصيلية (الإيرادات، التكاليف، التوقعات)</li>
+            <li>وثائق Data Room (قانونية، مالية، ملكية فكرية، تجارية)</li>
+            <li>هوية المؤسسين وبيانات الفريق التفصيلية</li>
+            <li>تقييم الشركة والشروط المالية للصفقة</li>
+            <li>Pitch Deck والعرض الاستثماري</li>
+            <li>أي معلومات يُصنّفها الطرف المُفصِح كسرية</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="n4">
+          <h2><span class="sec-num">4</span> التزامات المستثمر</h2>
+          <ul>
+            <li>الحفاظ على سرية جميع المعلومات التي يطّلع عليها</li>
+            <li>عدم مشاركة أي بيانات مع أطراف خارجية بدون إذن كتابي</li>
+            <li>استخدام المعلومات لأغراض تقييم الاستثمار فقط</li>
+            <li>إبلاغ المنصة فوراً في حالة حدوث أي تسريب غير مقصود</li>
+            <li>حذف جميع المعلومات عند انتهاء صلاحية الـ NDA أو طلب الشركة ذلك</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="n5">
+          <h2><span class="sec-num">5</span> التزامات الشركة الناشئة</h2>
+          <ul>
+            <li>توفير معلومات دقيقة وحقيقية في ملفها الاستثماري</li>
+            <li>الإفصاح عن أي قيود قانونية على مشاركة بعض البيانات</li>
+            <li>إشعار المستثمر فور انتهاء صلاحية الـ NDA</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="n6">
+          <h2><span class="sec-num">6</span> مدة الاتفاقية وتجديدها</h2>
+          <ul>
+            <li>الـ NDA صالح لمدة <strong>90 يوماً</strong> من تاريخ التوقيع</li>
+            <li>يمكن تجديده بموافقة الطرفين</li>
+            <li>تُلغى الصلاحية تلقائياً عند انتهاء المدة</li>
+            <li>تحتفظ المنصة بسجل رقمي للـ NDA لمدة 3 سنوات</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="n7">
+          <h2><span class="sec-num">7</span> عواقب انتهاك الاتفاقية</h2>
+          <p>في حال ثبوت انتهاك اتفاقية NDA:</p>
+          <ul>
+            <li>تعليق حساب المخالف فوراً وإشعار الطرف المتضرر</li>
+            <li>حق الشركة الناشئة في المطالبة بالتعويض القانوني</li>
+            <li>حظر دائم من المنصة</li>
+            <li>إبلاغ الجهات التنظيمية المختصة عند الضرورة</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="n8">
+          <h2><span class="sec-num">8</span> الاستثناءات</h2>
+          <p>لا تنطبق الاتفاقية على المعلومات التي:</p>
+          <ul>
+            <li>كانت متاحة للعموم قبل توقيع الـ NDA</li>
+            <li>حصل عليها المستثمر بشكل مستقل ومن مصدر مشروع</li>
+            <li>أُفصح عنها بموجب أمر قضائي أو قانوني</li>
+            <li>وافقت الشركة الناشئة صراحةً على الإفصاح عنها</li>
+          </ul>
+          <a href="{% url 'core:contact' %}" class="btn btn-primary" style="margin-top:8px">
+            <i class="ti ti-mail"></i> استفسار قانوني
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'partials/footer.html' %}
+<script src="{% static 'js/rabit.js' %}"></script>
+{% endblock %}

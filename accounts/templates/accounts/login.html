@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}تسجيل الدخول — رابط RABIT{% endblock %}
+
+{% block body %}
+<div class="auth-wrap">
+  <div class="auth-left">
+    <div class="al-brand"><img src="{% static 'images/logo-small.png' %}" alt="رابط" class="al-logo-img"><div class="al-name">رابط <span>RABIT</span></div></div>
+    <div class="al-hero">
+      <h1 class="al-title">منصة الاستثمار الذكية<br/><span>لكل رحلة استثمارية</span></h1>
+      <p class="al-sub">سجل دخولك للوصول إلى لوحة تحكم خاصة بدورك — شركة ناشئة، مستثمر، أو مستشار.</p>
+      <div class="al-stats">
+        <div class="al-stat"><div class="al-stat-v">+200</div><div class="al-stat-l">شركة ناشئة</div></div>
+        <div class="al-stat"><div class="al-stat-v">+85</div><div class="al-stat-l">مستثمر نشط</div></div>
+        <div class="al-stat"><div class="al-stat-v">+40</div><div class="al-stat-l">صفقة مكتملة</div></div>
+        <div class="al-stat"><div class="al-stat-v">60</div><div class="al-stat-l">يوم متوسط الإغلاق</div></div>
+      </div>
+      <div class="al-conds">
+        <div class="al-conds-title"><i class="ti ti-shield-check"></i> منصة آمنة وموثوقة</div>
+        <div class="al-cond"><i class="ti ti-check"></i>اتفاقية عدم الإفصاح رقمية إلزامية قبل الملفات الحساسة</div>
+        <div class="al-cond"><i class="ti ti-check"></i>Data Room محمية بصلاحيات متعددة الطبقات</div>
+        <div class="al-cond"><i class="ti ti-check"></i>Watermark تلقائي على جميع المستندات</div>
+        <div class="al-cond"><i class="ti ti-check"></i>سجل وصول كامل لكل المشاهدات</div>
+      </div>
+    </div>
+    <div class="al-foot">© 2024 رابط RABIT. مرخّصة في المملكة العربية السعودية.</div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-right-inner">
+      <a href="/" class="auth-back"><i class="ti ti-arrow-right"></i> العودة للرئيسية</a>
+      <div class="auth-toggle">
+        <span class="auth-tab on">تسجيل الدخول</span>
+        <a href="{% url 'accounts:register' %}" class="auth-tab">إنشاء حساب جديد</a>
+      </div>
+
+      <h2 class="auth-form-title">مرحباً بعودتك 👋</h2>
+      <p class="auth-form-sub">أدخل بياناتك للدخول إلى منصة رابط</p>
+
+      {% if form.non_field_errors %}
+      <div class="alert a-er"><i class="ti ti-alert-circle"></i>{{ form.non_field_errors.0 }}</div>
+      {% endif %}
+
+      <form method="post" action="{% url 'accounts:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+        {% csrf_token %}
+        <div class="fg">
+          <label class="fl">البريد الإلكتروني أو اسم المستخدم</label>
+          <input class="fi" name="username" type="text" placeholder="أدخل بريدك الإلكتروني" dir="ltr" style="text-align:right" autofocus/>
+        </div>
+        <div class="fg">
+          <label class="fl">كلمة المرور</label>
+          <div class="pw-wrap"><input class="fi" name="password" type="password" id="pw-login" placeholder="••••••••"/><span class="pw-eye ti ti-eye" onclick="tglPw('pw-login',this)"></span></div>
+        </div>
+        <div class="forgot-pw"><a href="{% url 'accounts:password_reset' %}" class="forgot-pw-link">نسيت كلمة المرور؟</a></div>
+        <button type="submit" class="btn btn-primary w-full btn-lg"><i class="ti ti-login"></i> تسجيل الدخول</button>
+      </form>
+
+      <div style="text-align:center;margin-top:22px;font-size:.82rem;color:var(--mu)">
+        ليس لديك حساب؟ <a href="{% url 'accounts:register' %}" style="color:var(--p);font-weight:700">إنشاء حساب مجاناً</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function tglPw(id, el) {
+  var inp = document.getElementById(id);
+  if (!inp) return;
+  var isText = inp.type === 'text';
+  inp.type = isText ? 'password' : 'text';
+  el.classList.toggle('ti-eye', isText);
+  el.classList.toggle('ti-eye-off', !isText);
+}
+</script>
+{% endblock %}

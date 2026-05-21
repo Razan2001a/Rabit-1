@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>إنشاء حساب — رابط RABIT</title>
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+,::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#2563EB;--pd:#1D4ED8;--pu:#7C3AED;
+  --pg:rgba(37,99,235,.1);--pg2:rgba(37,99,235,.05);
+  --dk:#0F172A;--tx:#1E293B;--mu:#64748B;--lm:#94A3B8;
+  --bd:#E2E8F0;--bg:#F7FAFC;--bg2:#EFF4FB;
+  --ok:#16A34A;--okg:rgba(22,163,74,.08);
+  --er:#DC2626;--erg:rgba(220,38,38,.08);
+  --nv:#0B1D4A;--nv2:#091640;--nv3:#060F2E;
+  --r:12px;--r2:8px;
+}
+html,body{min-height:100%;font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);direction:rtl;line-height:1.65}
+a{text-decoration:none;color:inherit}
+button,input,select{font-family:'Tajawal',sans-serif}
+
+/* ── LAYOUT ── */
+.auth-wrap{min-height:100vh;display:flex}
+.auth-left{
+  width:44%;min-width:360px;
+  background:linear-gradient(165deg,var(--nv) 0%,var(--nv2) 55%,var(--nv3) 100%);
+  display:flex;flex-direction:column;padding:36px;position:relative;overflow:hidden;flex-shrink:0
+}
+.auth-left::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.18),transparent);top:-180px;right:-80px;pointer-events:none}
+.auth-left::after{content:'';position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.12),transparent);bottom:-120px;left:-80px;pointer-events:none}
+.al-brand{display:flex;align-items:center;gap:10px;margin-bottom:40px;position:relative;z-index:1}
+.al-logo{width:38px;height:38px;background:linear-gradient(135deg,var(--p),var(--pu));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;color:#fff}
+.al-name{font-size:1rem;font-weight:800;color:#fff}
+.al-hero{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:center}
+.al-title{font-size:1.55rem;font-weight:900;color:#fff;line-height:1.35;margin-bottom:12px}
+.al-title span{background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.al-sub{font-size:.88rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:24px}
+.al-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.al-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:14px}
+.al-stat-v{font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:3px}
+.al-stat-l{font-size:.7rem;color:rgba(255,255,255,.4)}
+.al-conds{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px}
+.al-conds-title{font-size:.75rem;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:11px;display:flex;align-items:center;gap:6px}
+.al-cond{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:.76rem;color:rgba(255,255,255,.45);line-height:1.5}
+.al-cond i{color:#4ade80;font-size:.82rem;flex-shrink:0;margin-top:2px}
+.al-foot{font-size:.68rem;color:rgba(255,255,255,.18);margin-top:24px;position:relative;z-index:1}
+
+/* ── RIGHT PANEL ── */
+.auth-right{flex:1;background:#fff;display:flex;flex-direction:column;overflow-y:auto}
+.auth-right-inner{flex:1;display:flex;flex-direction:column;justify-content:center;padding:44px 52px;max-width:520px;margin:0 auto;width:100%}
+.auth-back{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;color:var(--mu);padding:6px 10px;border-radius:var(--r2);transition:all .15s;margin-bottom:28px;text-decoration:none}
+.auth-back:hover{color:var(--p);background:var(--pg2)}
+.auth-toggle{display:flex;background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:4px;margin-bottom:28px}
+.auth-tab{flex:1;padding:9px;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;color:var(--mu);text-align:center;display:block;text-decoration:none}
+.auth-tab.on{background:#fff;color:var(--p);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+/* ── TYPE CARDS ── */
+.page-title{font-size:1.4rem;font-weight:900;color:var(--dk);margin-bottom:6px}
+.page-sub{font-size:.88rem;color:var(--mu);margin-bottom:24px}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.tc{border:2px solid var(--bd);border-radius:var(--r);padding:18px 12px;text-align:center;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;background:#fff}
+.tc:hover{border-color:var(--p);transform:translateY(-2px);box-shadow:0 4px 18px rgba(37,99,235,.1)}
+.tc.sel{border-color:var(--p);background:var(--pg2)}
+.tc-check{position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;background:var(--p);display:none;align-items:center;justify-content:center;font-size:.58rem;color:#fff}
+.tc.sel .tc-check{display:flex}
+.tc i{font-size:1.8rem;color:var(--lm);margin-bottom:9px;display:block;transition:color .2s}
+.tc.sel i{color:var(--p)}
+.tc-name{font-size:.86rem;font-weight:800;color:var(--dk)}
+.tc-sub{font-size:.7rem;color:var(--mu);margin-top:3px}
+
+/* ── FORM ── */
+.step-form{display:none}
+.step-form.visible{display:block}
+.fg{margin-bottom:13px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:13px}
+.fl{font-size:.76rem;font-weight:700;color:var(--tx);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.req{color:var(--er)}
+.fi{width:100%;padding:10px 13px;border:1.5px solid var(--bd);border-radius:var(--r2);font-size:.84rem;color:var(--tx);background:#fff;direction:rtl;outline:none;transition:border-color .2s,box-shadow .2s}
+.fi:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(37,99,235,.09)}
+.fi::placeholder{color:var(--lm)}
+.fh{font-size:.71rem;color:var(--mu);margin-top:3px}
+.form-error{font-size:.75rem;color:var(--er);margin-top:4px;display:flex;align-items:center;gap:4px}
+.pw-wrap{position:relative}
+.pw-wrap .fi{padding-left:38px}
+.pw-eye{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--lm);cursor:pointer;font-size:.9rem}
+.pw-eye:hover{color:var(--mu)}
+.agree-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:20px;font-size:.8rem;color:var(--mu)}
+.agree-row a{color:var(--p);font-weight:600}
+
+/* ── ALERT ── */
+.alert-er{background:var(--erg);border:1px solid rgba(220,38,38,.2);border-radius:var(--r2);padding:10px 13px;font-size:.8rem;color:var(--er);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* ── BUTTON ── */
+.btn-next{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:13px;border-radius:10px;background:var(--p);color:#fff;font-size:.93rem;font-weight:700;border:none;cursor:pointer;transition:all .2s;font-family:'Tajawal',sans-serif;box-shadow:0 4px 14px rgba(37,99,235,.22)}
+.btn-next:hover{background:var(--pd);transform:translateY(-1px)}
+.btn-next:disabled{opacity:.5;pointer-events:none;transform:none}
+.btn-ghost{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;background:transparent;color:var(--mu);font-size:.78rem;font-weight:600;border:none;cursor:pointer;border-radius:var(--r2);transition:all .15s;margin-bottom:12px}
+.btn-ghost:hover{background:var(--bg2);color:var(--tx)}
+
+@media(max-width:768px){
+  .auth-left{display:none}
+  .auth-right-inner{padding:32px 24px}
+  .fr{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+
+  <!-- ── LEFT PANEL ── -->
+  <div class="auth-left">
+    <div class="al-brand">
+      <img src="{% static 'images/logo-small.png' %}" alt="رابط" class="al-logo-img">
+      <div class="al-name">رابط <span class="al-name-en">RABIT</span></div>
+    </div>
+    <div class="al-hero">
+      <h1 class="al-title">منصة الاستثمار الذكية<br/><span>لكل رحلة استثمارية</span></h1>
+      <p class="al-sub">اختر دورك وابدأ رحلتك — التسجيل مجاني تماماً ولا يستغرق أكثر من دقائق.</p>
+      <div class="al-stats">
+        <div class="al-stat"><div class="al-stat-v">+200</div><div class="al-stat-l">شركة ناشئة مسجلة</div></div>
+        <div class="al-stat"><div class="al-stat-v">+85</div><div class="al-stat-l">مستثمر معتمد</div></div>
+        <div class="al-stat"><div class="al-stat-v">+40</div><div class="al-stat-l">صفقة مكتملة</div></div>
+        <div class="al-stat"><div class="al-stat-v">60 يوم</div><div class="al-stat-l">متوسط الإغلاق</div></div>
+      </div>
+      <div class="al-conds">
+        <div class="al-conds-title"><i class="ti ti-shield-check"></i> منصة آمنة وموثوقة</div>
+        <div class="al-cond"><i class="ti ti-check"></i>اتفاقية عدم الإفصاح رقمية إلزامية قبل الملفات الحساسة</div>
+        <div class="al-cond"><i class="ti ti-check"></i>Data Room محمية بصلاحيات متعددة الطبقات</div>
+        <div class="al-cond"><i class="ti ti-check"></i>Scorecard موثوق لكل شركة ناشئة</div>
+        <div class="al-cond"><i class="ti ti-check"></i>مراجعة معتمدة قبل الطرح</div>
+      </div>
+    </div>
+    <div class="al-foot">© 2024 رابط RABIT — منصة استثمارية سعودية</div>
+  </div>
+
+  <!-- ── RIGHT PANEL ── -->
+  <div class="auth-right">
+    <div class="auth-right-inner">
+
+      <a href="/" class="auth-back"><i class="ti ti-arrow-right"></i> العودة للموقع</a>
+
+      <div class="auth-toggle">
+        <a href="{% url 'accounts:login' %}" class="auth-tab">تسجيل الدخول</a>
+        <span class="auth-tab on">إنشاء حساب جديد</span>
+      </div>
+
+      <!-- ═══ STEP A: اختيار الدور ═══ -->
+      <div id="step-role">
+        <h2 class="page-title">من أنت؟</h2>
+        <p class="page-sub">اختر نوع حسابك للبدء — التسجيل مجاني تماماً</p>
+
+        <div class="type-grid">
+          <div class="tc" id="tc-startup" onclick="selectRole('startup')">
+            <div class="tc-check"><i class="ti ti-check" style="font-size:.55rem"></i></div>
+            <i class="ti ti-rocket"></i>
+            <div class="tc-name">شركة ناشئة</div>
+            <div class="tc-sub">أبحث عن تمويل</div>
+          </div>
+          <div class="tc" id="tc-investor" onclick="selectRole('investor')">
+            <div class="tc-check"><i class="ti ti-check" style="font-size:.55rem"></i></div>
+            <i class="ti ti-briefcase"></i>
+            <div class="tc-name">مستثمر</div>
+            <div class="tc-sub">أبحث عن فرص</div>
+          </div>
+          <div class="tc" id="tc-advisor" onclick="selectRole('advisor')">
+            <div class="tc-check"><i class="ti ti-check" style="font-size:.55rem"></i></div>
+            <i class="ti ti-award"></i>
+            <div class="tc-name">مستشار</div>
+            <div class="tc-sub">أريد الانضمام</div>
+          </div>
+        </div>
+
+        <button class="btn-next" id="btn-role-next" disabled onclick="goToForm()">
+          <span id="btn-role-label">اختر نوع حسابك أولاً</span>
+          <i class="ti ti-arrow-left"></i>
+        </button>
+
+        <div style="text-align:center;margin-top:18px;font-size:.82rem;color:var(--mu)">
+          لديك حساب؟ <a href="{% url 'accounts:login' %}" style="color:var(--p);font-weight:700">تسجيل الدخول</a>
+        </div>
+      </div>
+
+      <!-- ═══ STEP B: نموذج التسجيل ═══ -->
+      <div id="step-form" style="display:none">
+
+        <button class="btn-ghost" onclick="backToRole()">
+          <i class="ti ti-arrow-right"></i> رجوع
+        </button>
+
+        <!-- Server errors -->
+        {% if form.non_field_errors %}
+        <div class="alert-er">
+          <i class="ti ti-alert-circle"></i>
+          {% for e in form.non_field_errors %}{{ e }}{% endfor %}
+        </div>
+        {% endif %}
+        {% if form.email.errors %}
+        <div class="alert-er">
+          <i class="ti ti-alert-circle"></i>{{ form.email.errors.0 }}
+        </div>
+        {% endif %}
+
+        <h2 class="page-title" id="form-title">إنشاء حسابك</h2>
+        <p class="page-sub" id="form-sub">خطوة أخيرة — أدخل بياناتك الأساسية</p>
+
+        <form method="post" action="{% url 'accounts:register' %}" id="reg-form">
+          {% csrf_token %}
+          <input type="hidden" name="role" id="role-input" value=""/>
+
+          <!-- الاسم — لكل الأدوار -->
+          <div class="fr">
+            <div>
+              <label class="fl">الاسم الأول <span class="req">*</span></label>
+              <input class="fi" name="first_name" id="f-fn"
+                     value="{{ form.first_name.value|default:'' }}"
+                     placeholder="محمد" required/>
+            </div>
+            <div>
+              <label class="fl">اسم العائلة <span class="req">*</span></label>
+              <input class="fi" name="last_name" id="f-ln"
+                     value="{{ form.last_name.value|default:'' }}"
+                     placeholder="العمري" required/>
+            </div>
+          </div>
+
+          <!-- البريد — لكل الأدوار -->
+          <div class="fg">
+            <label class="fl">البريد الإلكتروني <span class="req">*</span></label>
+            <input class="fi" name="email" id="f-em" type="email"
+                   value="{{ form.email.value|default:'' }}"
+                   placeholder="example@domain.com" dir="ltr"
+                   style="text-align:right" required/>
+          </div>
+
+          <!-- رقم الجوال — لكل الأدوار -->
+          <div class="fg">
+            <label class="fl">رقم الجوال <span class="req" id="phone-req" style="display:none">*</span></label>
+            <input class="fi" name="phone" id="f-ph"
+                   placeholder="+966 5X XXX XXXX" dir="ltr"
+                   style="text-align:right"/>
+          </div>
+
+          <!-- كلمة المرور — لكل الأدوار -->
+          <div class="fg">
+            <label class="fl">كلمة المرور <span class="req">*</span></label>
+            <div class="pw-wrap">
+              <input class="fi" name="password1" id="f-pw1" type="password"
+                     placeholder="8 أحرف على الأقل" dir="ltr" required/>
+              <span class="pw-eye ti ti-eye" onclick="tglPw('f-pw1',this)"></span>
+            </div>
+            <div class="fh"><i class="ti ti-info-circle"></i> 8 أحرف على الأقل</div>
+          </div>
+
+          <div class="fg">
+            <label class="fl">تأكيد كلمة المرور <span class="req">*</span></label>
+            <input class="fi" name="password2" id="f-pw2" type="password"
+                   placeholder="أعد إدخال كلمة المرور" dir="ltr" required/>
+            {% if form.password2.errors %}
+            <div class="form-error"><i class="ti ti-alert-circle"></i>{{ form.password2.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="agree-row">
+            <input type="checkbox" name="agree_terms" id="f-agree"
+                   style="margin-top:3px;flex-shrink:0;accent-color:var(--p)" required
+                   {% if form.agree_terms.value %}checked{% endif %}/>
+            <label for="f-agree">
+              أوافق على
+              <a href="#">شروط الخدمة</a> و<a href="#">سياسة الخصوصية</a>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-next" id="btn-submit">
+            <span id="btn-submit-label">إنشاء الحساب والبدء</span>
+            <i class="ti ti-arrow-left"></i>
+          </button>
+        </form>
+
+        <div style="text-align:center;margin-top:18px;font-size:.82rem;color:var(--mu)">
+          لديك حساب؟ <a href="{% url 'accounts:login' %}" style="color:var(--p);font-weight:700">تسجيل الدخول</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+var selectedRole = null;
+
+var roleLabels = {
+  startup:  'متابعة كشركة ناشئة',
+  investor: 'متابعة كمستثمر',
+  advisor:  'متابعة كمستشار'
+};
+
+var formTitles = {
+  startup:  'إنشاء حساب شركتك الناشئة',
+  investor: 'إنشاء حساب المستثمر',
+  advisor:  'إنشاء حساب المستشار'
+};
+
+var submitLabels = {
+  startup:  'إنشاء الحساب والبدء',
+  investor: 'إنشاء الحساب والمتابعة',
+  advisor:  'إنشاء الحساب والمتابعة'
+};
+
+/* ── ROLE SELECTION ── */
+function selectRole(role) {
+  selectedRole = role;
+  ['startup','investor','advisor'].forEach(function(r) {
+    document.getElementById('tc-' + r).classList.toggle('sel', r === role);
+  });
+  var btn = document.getElementById('btn-role-next');
+  btn.disabled = false;
+  document.getElementById('btn-role-label').textContent = roleLabels[role];
+
+  var ph = document.getElementById('f-ph');
+  var phReq = document.getElementById('phone-req');
+  if (role === 'investor') {
+    ph.required = true;
+    phReq.style.display = 'inline';
+  } else {
+    ph.required = false;
+    phReq.style.display = 'none';
+  }
+}
+/* ── GO TO FORM ── */
+function goToForm() {
+  if (!selectedRole) return;
+
+  // Set hidden role input
+  document.getElementById('role-input').value = selectedRole;
+
+  // Update form title & submit label
+  document.getElementById('form-title').textContent = formTitles[selectedRole];
+  document.getElementById('btn-submit-label').textContent = submitLabels[selectedRole];
+
+
+  // Switch views
+  document.getElementById('step-role').style.display = 'none';
+  document.getElementById('step-form').style.display  = 'block';
+}
+
+/* ── BACK TO ROLE ── */
+function backToRole() {
+  document.getElementById('step-form').style.display = 'none';
+  document.getElementById('step-role').style.display = 'block';
+}
+
+/* ── PASSWORD TOGGLE ── */
+function tglPw(id, el) {
+  var inp = document.getElementById(id);
+  if (!inp) return;
+  var isText = inp.type === 'text';
+  inp.type = isText ? 'password' : 'text';
+  el.classList.toggle('ti-eye', isText);
+  el.classList.toggle('ti-eye-off', !isText);
+}
+
+/* ── INIT: if form errors from server, show form step with correct role ── */
+(function() {
+  {% if form.errors or request.POST.role %}
+  var postedRole = '{{ request.POST.role|default:"" }}';
+  if (postedRole) {
+    selectedRole = postedRole;
+    document.getElementById('tc-' + postedRole).classList.add('sel');
+    goToForm();
+  }
+  {% endif %}
+
+  {% if initial_role and not form.errors %}
+  var initRole = '{{ initial_role }}';
+  if (initRole) {
+    selectedRole = initRole;
+    document.getElementById('tc-' + initRole).classList.add('sel');
+    document.getElementById('btn-role-next').disabled = false;
+    document.getElementById('btn-role-label').textContent = roleLabels[initRole];
+  }
+  {% endif %}
+})();
+</script>
+</body>
+</html>

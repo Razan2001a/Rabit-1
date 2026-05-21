@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}الشروط والأحكام — رابط RABIT{% endblock %}
+{% block body %}
+{% include 'partials/_public_header.html' %}
+
+<style>
+.legal-hero{padding:64px 0 48px;background:linear-gradient(145deg,#020617 0%,#0b1120 60%,#0f1729 100%);position:relative;overflow:hidden;text-align:center}
+.legal-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 40%,rgba(124,58,237,.2),transparent 55%)}
+.legal-hero-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
+.legal-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);padding:6px 16px;border-radius:100px;font-size:.82rem;font-weight:700;margin-bottom:18px}
+.legal-hero h1{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:900;color:#fff;margin-bottom:12px}
+.legal-hero p{color:rgba(255,255,255,.6);font-size:.95rem;line-height:1.75}
+.legal-meta{display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap}
+.legal-meta span{display:flex;align-items:center;gap:6px;font-size:.8rem;color:rgba(255,255,255,.5)}
+.legal-layout{display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:start;padding:56px 0}
+@media(max-width:860px){.legal-layout{grid-template-columns:1fr}}
+.legal-toc{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:20px;position:sticky;top:90px}
+.legal-toc h4{font-size:.85rem;font-weight:800;color:var(--dk);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--bd)}
+.legal-toc a{display:block;font-size:.82rem;color:var(--muted);padding:6px 10px;border-radius:6px;transition:all var(--t);margin-bottom:2px}
+.legal-toc a:hover{background:var(--pug);color:var(--pu)}
+.legal-content{max-width:100%}
+.legal-section{margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid var(--bd)}
+.legal-section:last-child{border-bottom:none}
+.legal-section h2{font-size:1.2rem;font-weight:800;color:var(--dk);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.legal-section h2 .sec-num{width:28px;height:28px;background:var(--pug);color:var(--pu);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;flex-shrink:0}
+.legal-section p{font-size:.93rem;color:var(--tx);line-height:1.85;margin-bottom:12px}
+.legal-section ul{padding-right:20px;margin-bottom:12px}
+.legal-section ul li{font-size:.93rem;color:var(--tx);line-height:1.85;margin-bottom:6px}
+.legal-highlight{background:var(--pug);border:1px solid rgba(124,58,237,.2);border-radius:var(--r2);padding:16px 18px;margin-bottom:16px}
+.legal-highlight p{margin:0;font-size:.88rem;color:var(--tx)}
+.legal-highlight strong{color:var(--pu)}
+@media(max-width:860px){.legal-toc{display:none}}
+</style>
+
+<section class="legal-hero">
+  <div class="container legal-hero-inner">
+    <div class="legal-badge"><i class="ti ti-file-text"></i> قانوني</div>
+    <h1>الشروط والأحكام</h1>
+    <p>يُرجى قراءة هذه الشروط بعناية قبل استخدام منصة رابط RABIT</p>
+    <div class="legal-meta">
+      <span><i class="ti ti-calendar"></i> آخر تحديث: يناير 2024</span>
+      <span><i class="ti ti-map-pin"></i> المملكة العربية السعودية</span>
+      <span><i class="ti ti-clock"></i> وقت القراءة: 7 دقائق</span>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0">
+  <div class="container">
+    <div class="legal-layout">
+
+      <aside class="legal-toc">
+        <h4><i class="ti ti-list"></i> المحتويات</h4>
+        <a href="#t1">قبول الشروط</a>
+        <a href="#t2">الأهلية والتسجيل</a>
+        <a href="#t3">أدوار المستخدمين</a>
+        <a href="#t4">المحتوى والملكية الفكرية</a>
+        <a href="#t5">الرسوم والعمولات</a>
+        <a href="#t6">المسؤولية والضمانات</a>
+        <a href="#t7">إنهاء الخدمة</a>
+        <a href="#t8">النزاعات والقانون المعمول به</a>
+      </aside>
+
+      <div class="legal-content">
+
+        <div class="legal-highlight">
+  <p>
+    <i class="fa-solid fa-file-contract"></i>
+    <strong>تنبيه:</strong>
+    باستخدامك لمنصة رابط، فإنك توافق على الالتزام بجميع الشروط والأحكام الواردة في هذه الوثيقة. إذا كنت لا توافق على أي من هذه الشروط، يُرجى التوقف عن استخدام المنصة.
+  </p>
+</div>
+
+        <div class="legal-section" id="t1">
+          <h2><span class="sec-num">1</span> قبول الشروط</h2>
+          <p>باستخدامك لمنصة رابط RABIT ("المنصة")، فإنك تقرّ بأنك قرأت هذه الشروط وفهمتها وتوافق على الالتزام بها. تحتفظ شركة رابط بحق تعديل هذه الشروط في أي وقت مع إشعار المستخدمين عبر البريد الإلكتروني أو الإشعارات داخل المنصة.</p>
+        </div>
+
+        <div class="legal-section" id="t2">
+          <h2><span class="sec-num">2</span> الأهلية والتسجيل</h2>
+          <p>للتسجيل في المنصة يجب أن:</p>
+          <ul>
+            <li>يكون عمرك 18 سنة أو أكثر</li>
+            <li>تكون مقيماً أو تعمل في المملكة العربية السعودية أو دول مجلس التعاون الخليجي</li>
+            <li>تقدّم معلومات صحيحة ودقيقة عند التسجيل</li>
+            <li>تحافظ على سرية بيانات الدخول الخاصة بك</li>
+            <li>تُبلّغ المنصة فوراً عن أي اختراق أو وصول غير مصرح به لحسابك</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="t3">
+          <h2><span class="sec-num">3</span> أدوار المستخدمين والتزاماتهم</h2>
+          <p><strong>الشركات الناشئة:</strong> تلتزم بتقديم معلومات دقيقة وموثّقة في ملفها الاستثماري، وعدم تضليل المستثمرين بأي صورة.</p>
+          <p><strong>المستثمرون:</strong> يلتزمون بإكمال متطلبات KYC، وعدم مشاركة بيانات الشركات الناشئة المحمية بـ NDA مع أطراف خارجية.</p>
+          <p><strong>المستشارون:</strong> يلتزمون بتقديم خدمات ذات جودة مهنية عالية والحفاظ على سرية معلومات العملاء.</p>
+        </div>
+
+        <div class="legal-section" id="t4">
+          <h2><span class="sec-num">4</span> المحتوى والملكية الفكرية</h2>
+          <ul>
+            <li>جميع المحتويات التي يرفعها المستخدمون تبقى ملكاً لهم</li>
+            <li>بالرفع، تمنح المستخدم المنصةَ ترخيصاً محدوداً لعرض المحتوى وفق الأدوار المصرّح بها</li>
+            <li>جميع العلامات التجارية وشعارات منصة رابط محمية ولا يجوز استخدامها بدون إذن</li>
+            <li>يُحظر نسخ أو إعادة نشر أي محتوى من المنصة بدون إذن كتابي مسبق</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="t5">
+          <h2><span class="sec-num">5</span> الرسوم والعمولات</h2>
+          <ul>
+            <li>التسجيل والتصفح مجاني لجميع المستخدمين</li>
+            <li>تأخذ المنصة عمولة <strong>0.5%</strong> من قيمة كل صفقة استثمارية تُغلق عبرها</li>
+            <li>رسوم الخدمات الاستشارية تُحدد باتفاق مباشر بين الشركة والمستشار</li>
+            <li>تحتفظ المنصة بحق تعديل هياكل الرسوم مع إشعار مسبق لا يقل عن 30 يوماً</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="t6">
+          <h2><span class="sec-num">6</span> إخلاء المسؤولية والضمانات</h2>
+          <p>منصة رابط هي وسيط يسهّل التواصل بين الأطراف. لا تتحمل المنصة مسؤولية:</p>
+          <ul>
+            <li>قرارات الاستثمار التي يتخذها المستثمرون بناءً على المعلومات المتاحة</li>
+            <li>دقة المعلومات التي يقدمها المستخدمون في ملفاتهم</li>
+            <li>نتائج الصفقات أو الخدمات الاستشارية</li>
+            <li>أي خسائر مالية ناجمة عن استخدام المنصة</li>
+          </ul>
+        </div>
+
+        <div class="legal-section" id="t7">
+          <h2><span class="sec-num">7</span> إنهاء الخدمة</h2>
+          <p>تحتفظ المنصة بحق تعليق أو إنهاء أي حساب في حالات:</p>
+          <ul>
+            <li>انتهاك هذه الشروط والأحكام</li>
+            <li>تقديم معلومات مضللة أو مزورة</li>
+            <li>محاولة الاحتيال على مستخدمين آخرين</li>
+            <li>انتهاك اتفاقيات NDA الموقّعة</li>
+          </ul>
+          <p>يمكن للمستخدم إنهاء حسابه في أي وقت عبر التواصل مع الدعم.</p>
+        </div>
+
+        <div class="legal-section" id="t8">
+          <h2><span class="sec-num">8</span> النزاعات والقانون المعمول به</h2>
+          <p>تخضع هذه الشروط لأنظمة وقوانين المملكة العربية السعودية. في حالة أي نزاع، يُفضّل الحل الودي أولاً، وإن تعذّر، تختص المحاكم السعودية بالفصل فيه.</p>
+          <p>للاستفسارات القانونية: <strong>rabitplatform@gmail.com</strong></p>
+          <a href="{% url 'core:contact' %}" class="btn btn-primary" style="margin-top:8px">
+            <i class="ti ti-mail"></i> تواصل مع الفريق القانوني
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'partials/footer.html' %}
+<script src="{% static 'js/rabit.js' %}"></script>
+{% endblock %}

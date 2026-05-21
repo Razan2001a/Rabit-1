@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>{% block title %}رابط RABIT — منصة الاستثمار الذكية{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" media="print" onload="this.media='all'"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap"/></noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<link rel="stylesheet" href="{% static 'css/rabit.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}"/>
+{% block extra_css %}{% endblock %}
+</head>
+<body class="light-mode" id="body">
+
+{% block body %}{% endblock %}
+
+{# ── FLASH MESSAGES ── #}
+{% if messages %}
+<div class="toast-container" id="toastContainer">
+  {% for message in messages %}
+  <div class="toast toast-{{ message.tags }}" data-auto-dismiss>
+    <i class="ti {% if message.tags == 'success' %}ti-circle-check{% elif message.tags == 'error' %}ti-alert-circle{% elif message.tags == 'warning' %}ti-alert-triangle{% else %}ti-info-circle{% endif %}"></i>
+    <span>{{ message }}</span>
+    <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<script src="{% static 'js/rabit.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

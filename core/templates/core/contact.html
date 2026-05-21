@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}تواصل معنا — رابط RABIT{% endblock %}
+{% block body %}
+{% include 'partials/_public_header.html' %}
+
+<style>
+.contact-hero{padding:72px 0 80px;background:linear-gradient(145deg,#020617 0%,#0b1120 50%,#0f1729 100%);position:relative;overflow:hidden;text-align:center}
+.contact-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(37,99,235,.2),transparent 55%),radial-gradient(circle at 30% 70%,rgba(124,58,237,.15),transparent 50%)}
+.contact-hero-inner{position:relative;z-index:1;max-width:600px;margin:0 auto}
+.contact-hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);padding:6px 16px;border-radius:100px;font-size:.82rem;font-weight:700;margin-bottom:20px}
+.contact-hero h1{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:900;color:#fff;margin-bottom:14px;line-height:1.3}
+.contact-hero h1 em{font-style:normal;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.contact-hero p{color:rgba(255,255,255,.6);font-size:1rem;line-height:1.75}
+.contact-section{padding:72px 0}
+.contact-grid{display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:start}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}}
+.contact-form-card{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:36px;box-shadow:var(--sh)}
+.contact-form-card h2{font-size:1.3rem;font-weight:800;color:var(--dk);margin-bottom:6px}
+.contact-form-card>p{font-size:.9rem;color:var(--muted);margin-bottom:28px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:560px){.form-row{grid-template-columns:1fr}}
+.fi-group{margin-bottom:18px}
+.fi-group label{display:block;font-size:.85rem;font-weight:700;color:var(--tx);margin-bottom:6px}
+.fi-group label span{color:var(--er)}
+.fi-input{width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:var(--r2);background:var(--bg);color:var(--tx);font-family:'Tajawal',sans-serif;font-size:.93rem;outline:none;transition:border-color var(--t)}
+.fi-input:focus{border-color:var(--primary);background:var(--cd)}
+textarea.fi-input{resize:vertical;min-height:130px;line-height:1.65}
+select.fi-input{cursor:pointer}
+.submit-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--pu));color:#fff;font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:800;border:none;border-radius:var(--r2);cursor:pointer;transition:all var(--t);display:flex;align-items:center;justify-content:center;gap:10px}
+.submit-btn:hover{opacity:.92;transform:translateY(-1px)}
+.contact-sidebar{display:flex;flex-direction:column;gap:20px}
+.contact-info-card{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:28px;box-shadow:var(--sh)}
+.contact-info-card h3{font-size:1rem;font-weight:800;color:var(--dk);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.contact-info-card h3 i{color:var(--primary)}
+.ci-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.ci-item:last-child{border-bottom:none;padding-bottom:0}
+.ci-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.ci-icon.blue{background:var(--pg);color:var(--primary)}
+.ci-icon.purple{background:var(--pug);color:var(--pu)}
+.ci-icon.green{background:var(--okg);color:var(--ok)}
+.ci-icon.orange{background:var(--wng);color:var(--wn)}
+.ci-text strong{display:block;font-size:.9rem;font-weight:700;color:var(--dk);margin-bottom:2px}
+.ci-text span{font-size:.83rem;color:var(--muted)}
+.response-card{background:linear-gradient(135deg,var(--pg),var(--pug));border:1px solid rgba(37,99,235,.2);border-radius:var(--r);padding:24px;text-align:center}
+.response-card i{font-size:2rem;color:var(--primary);margin-bottom:10px;display:block}
+.response-card h4{font-size:1rem;font-weight:800;color:var(--dk);margin-bottom:6px}
+.response-card p{font-size:.85rem;color:var(--muted);line-height:1.6}
+.response-badge{display:inline-block;background:var(--okg);color:var(--ok);border:1px solid var(--okb);padding:4px 12px;border-radius:100px;font-size:.8rem;font-weight:700;margin-top:10px}
+.contact-faq{margin-top:64px}
+.contact-faq h2{font-size:1.5rem;font-weight:900;color:var(--dk);margin-bottom:8px;text-align:center}
+.contact-faq>p{text-align:center;color:var(--muted);margin-bottom:32px}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.faq-grid{grid-template-columns:1fr}}
+.faq-item{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:22px}
+.faq-item h4{font-size:.95rem;font-weight:800;color:var(--dk);margin-bottom:8px;display:flex;align-items:flex-start;gap:8px}
+.faq-item h4 i{color:var(--primary);margin-top:2px;flex-shrink:0}
+.faq-item p{font-size:.88rem;color:var(--muted);line-height:1.7}
+.alert-s{padding:12px 16px;border-radius:var(--r2);margin-bottom:20px;font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:10px;background:var(--okg);color:var(--ok);border:1px solid var(--okb)}
+.alert-e{padding:12px 16px;border-radius:var(--r2);margin-bottom:20px;font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:10px;background:var(--erg);color:var(--er);border:1px solid var(--erb)}
+</style>
+
+<section class="contact-hero">
+  <div class="container contact-hero-inner">
+    <div class="contact-hero-badge"><i class="ti ti-mail-forward"></i> نرد خلال 24 ساعة</div>
+    <h1>تواصل مع فريق<br/><em>رابط RABIT</em></h1>
+    <p>هل لديك سؤال أو فكرة أو اقتراح؟ فريقنا جاهز للمساعدة في كل ما يخص منصة الاستثمار.</p>
+  </div>
+</section>
+
+<section class="contact-section">
+  <div class="container">
+    <div class="contact-grid">
+
+      <div class="contact-form-card">
+        <h2><i class="ti ti-send" style="color:var(--primary)"></i> أرسل رسالتك</h2>
+        <p>سنرد عليك على البريد الإلكتروني المُدخل في أقرب وقت ممكن</p>
+        {% for message in messages %}
+          <div class="{% if 'success' in message.tags %}alert-s{% else %}alert-e{% endif %}">
+            <i class="ti {% if 'success' in message.tags %}ti-circle-check{% else %}ti-alert-circle{% endif %}"></i>
+            {{ message }}
+          </div>
+        {% endfor %}
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="fi-group">
+              <label>الاسم الكامل <span>*</span></label>
+              <input type="text" name="name" class="fi-input" placeholder="محمد العمري" required>
+            </div>
+            <div class="fi-group">
+              <label>البريد الإلكتروني <span>*</span></label>
+              <input type="email" name="email" class="fi-input" placeholder="name@company.com" dir="ltr" required>
+            </div>
+          </div>
+          <div class="fi-group">
+            <label>نوع الاستفسار</label>
+            <select name="subject" class="fi-input">
+              <option value="">اختر نوع الاستفسار</option>
+              <option>استفسار عام</option>
+              <option>شراكة وتعاون</option>
+              <option>دعم تقني</option>
+              <option>اقتراح أو ملاحظة</option>
+              <option>شكوى</option>
+              <option>إعلام وصحافة</option>
+            </select>
+          </div>
+          <div class="fi-group">
+            <label>رسالتك <span>*</span></label>
+            <textarea name="body" class="fi-input" placeholder="اكتب رسالتك هنا بالتفصيل…" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">
+            <i class="ti ti-send-2"></i> إرسال الرسالة
+          </button>
+        </form>
+      </div>
+
+      <div class="contact-sidebar">
+        <div class="contact-info-card">
+          <h3><i class="ti ti-info-circle"></i> معلومات التواصل</h3>
+          <div class="ci-item">
+            <div class="ci-icon blue"><i class="ti ti-mail"></i></div>
+            <div class="ci-text"><strong>البريد الإلكتروني</strong><span>rabitplatform@gmail.com</span></div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon purple"><i class="ti ti-map-pin"></i></div>
+            <div class="ci-text"><strong>الموقع</strong><span>الرياض، المملكة العربية السعودية</span></div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon green"><i class="ti ti-clock"></i></div>
+            <div class="ci-text"><strong>ساعات العمل</strong><span>الأحد – الخميس، 9ص – 6م</span></div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon orange"><i class="ti ti-brand-twitter"></i></div>
+            <div class="ci-text"><strong>تواصل اجتماعي</strong><span>@rabitplatform</span></div>
+          </div>
+        </div>
+        <div class="response-card">
+          <i class="ti ti-rocket"></i>
+          <h4>وقت الاستجابة</h4>
+          <p>نلتزم بالرد على جميع الاستفسارات خلال أوقات العمل الرسمية</p>
+          <div class="response-badge">⚡ خلال 24 ساعة عمل</div>
+        </div>
+        <div class="contact-info-card">
+          <h3><i class="ti ti-link"></i> روابط سريعة</h3>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="{% url 'accounts:register' %}?role=startup" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--pg2);border:1px solid rgba(37,99,235,.15);border-radius:var(--r2);font-size:.88rem;font-weight:700;color:var(--primary)">
+              <i class="ti ti-rocket"></i> تسجيل شركة ناشئة
+            </a>
+            <a href="{% url 'accounts:register' %}?role=investor" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--pg2);border:1px solid rgba(37,99,235,.15);border-radius:var(--r2);font-size:.88rem;font-weight:700;color:var(--primary)">
+              <i class="ti ti-chart-bar"></i> تسجيل كمستثمر
+            </a>
+            <a href="{% url 'accounts:register' %}?role=advisor" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--pug);border:1px solid rgba(124,58,237,.15);border-radius:var(--r2);font-size:.88rem;font-weight:700;color:var(--pu)">
+              <i class="ti ti-certificate"></i> التسجيل كمستشار
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-faq">
+      <h2>الأسئلة الشائعة</h2>
+      <p>إجابات سريعة لأكثر الأسئلة تكراراً</p>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4><i class="ti ti-question-mark"></i> كيف أسجّل شركتي الناشئة في رابط؟</h4>
+          <p>أنشئ حساباً باختيار دور "شركة ناشئة"، أكمل الـ Onboarding من 5 خطوات، ثم قدّم ملفك للمراجعة. بعد الاعتماد يُدرج ملفك للمستثمرين.</p>
+        </div>
+        <div class="faq-item">
+          <h4><i class="ti ti-question-mark"></i> ما هي متطلبات KYC للمستثمرين؟</h4>
+          <p>يحتاج المستثمر لرفع: الهوية الوطنية، إثبات نشاط استثماري، والسجل التجاري. تتم المراجعة خلال 5 ساعات عمل.</p>
+        </div>
+        <div class="faq-item">
+          <h4><i class="ti ti-question-mark"></i> ما هي عمولة المنصة على الصفقات؟</h4>
+          <p>تأخذ رابط عمولة 0.5% فقط من قيمة الصفقة عند إغلاقها رسمياً. لا رسوم مسبقة على التسجيل أو الاستكشاف.</p>
+        </div>
+        <div class="faq-item">
+          <h4><i class="ti ti-question-mark"></i> كيف تحمي المنصة بيانات شركتي؟</h4>
+          <p>تعتمد رابط 8 ضوابط أمان: NDA إلزامي، Watermark، سجلات وصول، موافقة على التحميل، وانتهاء صلاحية NDA بعد 90 يوم.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'partials/footer.html' %}
+<script src="{% static 'js/rabit.js' %}"></script>
+{% endblock %}

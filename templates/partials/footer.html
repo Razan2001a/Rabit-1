@@ -1,0 +1,47 @@
+{% load static %}
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo footer-logo">
+          <img src="{% static 'images/logo-small.png' %}" alt="رابط" class="footer-logo-img">
+          <span class="logo-text">رابط <span class="logo-en">RABIT</span></span>
+        </div>
+        <p class="footer-desc">منصة سعودية ذكية تربط الشركات الناشئة بالمستثمرين والمستشارين من أول ملف استثماري إلى إغلاق الصفقة بأمان وثقة.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link">X</a>
+          <a href="#" class="social-link">in</a>
+        </div>
+      </div>
+      <div class="footer-links-col">
+        <div class="footer-col">
+          <h5>المنصة</h5>
+          <a href="{% url 'core:index' %}">الرئيسية</a>
+          <a href="{% url 'core:index' %}#how-it-works">كيف تعمل</a>
+          <a href="{% url 'core:index' %}#protection">الحماية</a>
+          <a href="{% url 'core:index' %}#pricing">الأسعار</a>
+          <a href="{% url 'core:index' %}#faq">الأسئلة الشائعة</a>
+        </div>
+        <div class="footer-col">
+          <h5>المستخدمون</h5>
+          <a href="{% url 'core:public_startups' %}">للشركات الناشئة</a>
+          <a href="{% url 'core:public_investors' %}">للمستثمرين</a>
+          <a href="{% url 'core:public_advisors' %}">المستشارون</a>
+          <a href="{% url 'core:index' %}#services">الخدمات</a>
+          <a href="{% url 'core:index' %}#featured">فرص استثمارية</a>
+        </div>
+        <div class="footer-col">
+          <h5>قانوني</h5>
+          <a href="{% url 'core:privacy' %}">سياسة الخصوصية</a>
+          <a href="{% url 'core:terms' %}">الشروط والأحكام</a>
+          <a href="{% url 'core:nda_policy' %}">اتفاقية عدم الإفصاح</a>
+          <a href="{% url 'core:contact' %}">تواصل معنا</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 رابط RABIT. جميع الحقوق محفوظة. مرخّصة في المملكة العربية السعودية.</p>
+      <p>صُنع بـ ❤ في الرياض</p>
+    </div>
+  </div>
+</footer>

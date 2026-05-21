@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>{% block title %}لوحة التحكم — رابط{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" media="print" onload="this.media='all'"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<link rel="stylesheet" href="{% static 'css/rabit.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/dashboard-pages.css' %}"/>
+{% block extra_css %}{% endblock %}
+</head>
+<body class="dashboard-body" id="body" data-user-role="{{ request.user.role|default:'' }}">
+
+<div class="db-layout">
+
+  {# ── SIDEBAR ── #}
+  <aside class="db-sidebar" id="sidebar">
+    <div class="db-sb-top">
+      <div class="db-brand">
+        <img src="{% static 'images/logo-small.png' %}" alt="رابط" class="db-brand-img">
+        <div>
+          <div class="db-brand-name">رابط <span class="db-brand-sub-en">RABIT</span></div>
+          <div class="db-brand-sub">منصة الاستثمار الذكية</div>
+        </div>
+      </div>
+
+      {# Role chip #}
+      <div class="db-co-chip">
+        <div class="db-co-dot" style="background:{% block sidebar_dot_color %}#4ade80{% endblock %}"></div>
+        <span class="db-co-nm">{{ request.user.get_full_name|default:request.user.username }}</span>
+        <span class="db-co-st" style="background:rgba(37,99,235,.18);color:#93c5fd">{{ request.user.get_role_display }}</span>
+      </div>
+    </div>
+
+    {# Sidebar nav injected by child templates — fallback shows role-based links #}
+    {% block sidebar_nav %}
+      {% if request.user.is_authenticated %}
+        {% if request.user.role == 'startup' %}
+          {% include 'includes/startup_sidebar_nav.html' %}
+        {% elif request.user.role == 'investor' %}
+          <div class="db-nav-s">الرئيسية</div>
+          <div class="db-nav-g">
+            <a href="{% url 'dashboard:investor' %}" class="db-na"><i class="ti ti-layout-dashboard"></i><span class="db-na-lbl">لوحة التحكم</span></a>
+          </div>
+          <div class="db-nav-s">الفرص الاستثمارية</div>
+          <div class="db-nav-g">
+            <a href="{% url 'core:public_startups' %}" class="db-na"><i class="ti ti-search"></i><span class="db-na-lbl">استكشاف الشركات</span></a>
+            <a href="{% url 'matching:matches' %}" class="db-na"><i class="ti ti-target"></i><span class="db-na-lbl">المطابقات الذكية</span></a>
+            <a href="{% url 'deals:saved_list' %}" class="db-na"><i class="ti ti-bookmark"></i><span class="db-na-lbl">المحفوظات</span></a>
+            <a href="{% url 'deals:my_requests' %}" class="db-na"><i class="ti ti-inbox"></i><span class="db-na-lbl">طلباتي</span></a>
+            <a href="{% url 'messaging:index' %}" class="db-na"><i class="ti ti-message-circle"></i><span class="db-na-lbl">المحادثات</span></a>
+          </div>
+          <div class="db-nav-s">الصفقات</div>
+          <div class="db-nav-g">
+            <a href="{% url 'deals:my_deals' %}" class="db-na"><i class="ti ti-file-invoice"></i><span class="db-na-lbl">Deal Room</span></a>
+            <a href="{% url 'deals:portfolio' %}" class="db-na"><i class="ti ti-chart-pie"></i><span class="db-na-lbl">المحفظة</span></a>
+            <a href="{% url 'payments:index' %}" class="db-na"><i class="ti ti-wallet"></i><span class="db-na-lbl">المدفوعات</span></a>
+          </div>
+          <div class="db-nav-s">المستشارون</div>
+          <div class="db-nav-g">
+            <a href="{% url 'advisory:advisors_list' %}" class="db-na"><i class="ti ti-award"></i><span class="db-na-lbl">خدمات المستشارين</span></a>
+          </div>
+        {% elif request.user.role == 'advisor' %}
+          {% include 'includes/advisor_sidebar_nav.html' with nav_mode='links' %}
+        {% endif %}
+      {% endif %}
+    {% endblock %}
+
+    <div class="db-sb-bot">
+      <a href="/" class="db-na">
+        <i class="ti ti-home"></i>
+        <span class="db-na-lbl">الصفحة الرئيسية</span>
+      </a>
+      <a href="{% url 'accounts:logout' %}" class="db-na" style="color:rgba(252,165,165,.6)">
+        <i class="ti ti-logout"></i>
+        <span class="db-na-lbl">تسجيل الخروج</span>
+      </a>
+    </div>
+  </aside>
+
+  {# ── MAIN CONTENT ── #}
+  <div class="db-main">
+    {# Topbar #}
+    <div class="db-topbar">
+      <button class="db-tb-back" id="sidebarToggle">
+        <i class="ti ti-menu-2"></i>
+      </button>
+      <div class="db-tb-sep"></div>
+      <div class="db-tb-title">{% block page_title %}لوحة التحكم{% endblock %}</div>
+
+      {% block topbar_status %}{% endblock %}
+
+      {# جرس الإشعارات #}
+      <a href="{% url 'notifications:index' %}" class="db-tb-bell" title="الإشعارات">
+        <i class="ti ti-bell"></i>
+        {% if unread_notifications %}<span class="bell-badge">{{ unread_notifications }}</span>{% endif %}
+      </a>
+
+      <div class="db-tb-user" onclick="openUserProfile()" style="cursor:pointer" title="ملفي الشخصي">
+        <span class="db-tb-nm">{{ request.user.get_full_name|default:request.user.username }}</span>
+        <div class="db-tb-av">{{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}</div>
+      </div>
+    </div>
+
+    {# Flash Messages #}
+    {% if messages %}
+    <div style="padding:12px 22px 0">
+      {% for message in messages %}
+      <div class="alert a-{{ message.tags }}" style="display:flex;align-items:center;gap:9px">
+        <i class="ti {% if message.tags == 'success' %}ti-circle-check{% elif message.tags == 'error' %}ti-alert-circle{% else %}ti-info-circle{% endif %}"></i>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {# Page content #}
+    <div class="db-cnt">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+
+</div><!-- end db-layout -->
+
+<script src="{% static 'js/rabit.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

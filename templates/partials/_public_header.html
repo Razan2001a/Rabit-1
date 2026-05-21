@@ -1,0 +1,107 @@
+{% load static %}
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a href="{% url 'core:index' %}" class="logo">
+      <img src="{% static 'images/logo-small.png' %}" alt="رابط" class="logo-img">
+      <span class="logo-text">رابط <span class="logo-en">RABIT</span></span>
+    </a>
+    <nav class="nav-desktop" id="navDesktop">
+      {% if request.user.is_authenticated %}
+        {% if request.user.role == 'advisor' %}
+          <a href="{% url 'dashboard:advisor' %}"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+          <a href="{% url 'dashboard:advisor' %}?page=requests"><i class="ti ti-inbox"></i> طلبات الخدمات</a>
+          <a href="{% url 'dashboard:advisor' %}?page=active"><i class="ti ti-loader"></i> جاري التنفيذ</a>
+          <a href="{% url 'profiles:advisor_edit' %}"><i class="ti ti-user-check"></i> ملفي المهني</a>
+          <a href="{% url 'dashboard:advisor' %}?page=earnings"><i class="ti ti-wallet"></i> الأرباح</a>
+          <a href="{% url 'core:public_startups' %}">للشركات</a>
+          <a href="{% url 'core:public_investors' %}">للمستثمرين</a>
+          <a href="{% url 'core:public_advisors' %}">المستشارون</a>
+          <a href="{% url 'core:contact' %}">تواصل معنا</a>
+        {% elif request.user.role == 'startup' %}
+          {% elif request.user.role == 'investor' %}
+  <a href="{% url 'dashboard:investor' %}"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+  <a href="{% url 'core:public_startups' %}">للشركات</a>
+  <a href="{% url 'core:public_investors' %}">للمستثمرين</a>
+  <a href="{% url 'core:public_advisors' %}">المستشارون</a>
+          <a href="{% url 'core:contact' %}">تواصل معنا</a>
+        {% endif %}
+      {% else %}
+        <a href="{% url 'core:index' %}">الرئيسية</a>
+        <a href="{% url 'core:public_startups' %}">للشركات</a>
+        <a href="{% url 'core:public_investors' %}">للمستثمرين</a>
+        <a href="{% url 'core:public_advisors' %}">المستشارون</a>
+        <a href="{% url 'core:contact' %}">تواصل معنا</a>
+      {% endif %}
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
+        <span class="theme-icon light-icon">N</span>
+        <span class="theme-icon dark-icon">D</span>
+      </button>
+      {% if request.user.is_authenticated %}
+        <span class="user-pill">
+          <i class="ti ti-user-circle"></i>
+          {{ request.user.first_name|default:request.user.username }}
+          <span class="role-tag">
+            {% if request.user.role == 'advisor' %}مستشار
+            {% elif request.user.role == 'startup' %}شركة ناشئة
+            {% elif request.user.role == 'investor' %}مستثمر
+            {% endif %}
+          </span>
+        </span>
+        <a href="{% url 'accounts:logout' %}" class="btn btn-primary"><i class="ti ti-logout"></i> تسجيل الخروج</a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-ghost">تسجيل الدخول</a>
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary">ابدأ الآن</a>
+      {% endif %}
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <nav>
+      {% if request.user.is_authenticated %}
+        {% if request.user.role == 'advisor' %}
+          <a href="{% url 'dashboard:advisor' %}" class="mobile-link"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+          <a href="{% url 'dashboard:advisor' %}?page=requests" class="mobile-link"><i class="ti ti-inbox"></i> طلبات الخدمات</a>
+          <a href="{% url 'dashboard:advisor' %}?page=active" class="mobile-link"><i class="ti ti-loader"></i> جاري التنفيذ</a>
+          <a href="{% url 'profiles:advisor_edit' %}" class="mobile-link"><i class="ti ti-user-check"></i> ملفي المهني</a>
+          <a href="{% url 'dashboard:advisor' %}?page=earnings" class="mobile-link"><i class="ti ti-wallet"></i> الأرباح</a>
+          <a href="{% url 'dashboard:advisor' %}?page=settings" class="mobile-link"><i class="ti ti-settings"></i> الإعدادات</a>
+          <a href="{% url 'core:public_startups' %}" class="mobile-link">للشركات</a>
+          <a href="{% url 'core:public_investors' %}" class="mobile-link">للمستثمرين</a>
+          <a href="{% url 'core:public_advisors' %}" class="mobile-link">المستشارون</a>
+          <a href="{% url 'core:contact' %}" class="mobile-link">تواصل معنا</a>
+        {% elif request.user.role == 'startup' %}
+          <a href="{% url 'dashboard:startup' %}" class="mobile-link"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+          <a href="{% url 'dashboard:startup' %}?page=profile" class="mobile-link"><i class="ti ti-building"></i> ملف الشركة</a>
+          <a href="{% url 'dashboard:startup' %}?page=investors" class="mobile-link"><i class="ti ti-users"></i> المستثمرون</a>
+          <a href="{% url 'dashboard:startup' %}?page=advisors" class="mobile-link"><i class="ti ti-user-check"></i> المستشارون</a>
+          <a href="{% url 'dashboard:startup' %}?page=deals" class="mobile-link"><i class="ti ti-handshake"></i> الصفقات</a>
+          <a href="{% url 'core:public_startups' %}" class="mobile-link">للشركات</a>
+          <a href="{% url 'core:public_investors' %}" class="mobile-link">للمستثمرين</a>
+          <a href="{% url 'core:public_advisors' %}" class="mobile-link">المستشارون</a>
+          <a href="{% url 'core:contact' %}" class="mobile-link">تواصل معنا</a>
+        {% elif request.user.role == 'investor' %}
+  <a href="{% url 'dashboard:investor' %}" class="mobile-link"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a>
+  <a href="{% url 'core:public_startups' %}" class="mobile-link">للشركات</a>
+  <a href="{% url 'core:public_investors' %}" class="mobile-link">للمستثمرين</a>
+  <a href="{% url 'core:public_advisors' %}" class="mobile-link">المستشارون</a>
+          <a href="{% url 'core:contact' %}" class="mobile-link">تواصل معنا</a>
+        {% endif %}
+        <div class="mobile-actions">
+          <a href="{% url 'accounts:logout' %}" class="btn btn-primary w-full">تسجيل الخروج</a>
+        </div>
+      {% else %}
+        <a href="{% url 'core:index' %}" class="mobile-link">الرئيسية</a>
+        <a href="{% url 'core:public_startups' %}" class="mobile-link">للشركات الناشئة</a>
+        <a href="{% url 'core:public_investors' %}" class="mobile-link">للمستثمرين</a>
+        <a href="{% url 'core:public_advisors' %}" class="mobile-link">المستشارون</a>
+        <a href="{% url 'core:contact' %}" class="mobile-link">تواصل معنا</a>
+        <div class="mobile-actions">
+          <a href="{% url 'accounts:login' %}" class="btn btn-ghost w-full">تسجيل الدخول</a>
+          <a href="{% url 'accounts:register' %}" class="btn btn-primary w-full">ابدأ الآن</a>
+        </div>
+      {% endif %}
+    </nav>
+  </div>
+</header>

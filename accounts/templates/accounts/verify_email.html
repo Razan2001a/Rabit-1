@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>تحقق من بريدك — رابط RABIT</title>
+{% load static %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--p:#2563EB;--pd:#1D4ED8;--pu:#7C3AED;--dk:#0F172A;--tx:#1E293B;--mu:#64748B;--bd:#E2E8F0;--bg:#F7FAFC;--er:#DC2626;--ok:#16A34A;--nv:#0B1D4A;--nv2:#091640;--nv3:#060F2E}
+html,body{min-height:100%;font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);direction:rtl}
+.wrap{min-height:100vh;display:flex}
+
+/* اليسار */
+.left{width:42%;min-width:340px;background:linear-gradient(165deg,var(--nv) 0%,var(--nv2) 55%,var(--nv3) 100%);display:flex;flex-direction:column;padding:36px;position:relative;overflow:hidden;flex-shrink:0}
+.left::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.18),transparent);top:-180px;right:-80px;pointer-events:none}
+.brand{display:flex;align-items:center;gap:10px;position:relative;z-index:1;margin-bottom:auto}
+.logo-ico{width:38px;height:38px;background:linear-gradient(135deg,var(--p),var(--pu));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;color:#fff}
+.logo-tx{font-size:1rem;font-weight:800;color:#fff}
+.left-body{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;padding:24px 0}
+.left-ico-wrap{width:80px;height:80px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+.left-ico-wrap i{font-size:2.2rem;color:#60a5fa}
+.left-title{font-size:1.55rem;font-weight:900;color:#fff;line-height:1.4;margin-bottom:12px}
+.left-title span{background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.left-desc{font-size:.85rem;color:rgba(255,255,255,.42);line-height:1.75;margin-bottom:22px}
+.left-tips{display:flex;flex-direction:column;gap:10px}
+.tip{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:9px}
+.tip i{color:#4ade80;font-size:.9rem;margin-top:2px;flex-shrink:0}
+.tip-tx{font-size:.76rem;color:rgba(255,255,255,.42);line-height:1.55}
+.left-foot{font-size:.68rem;color:rgba(255,255,255,.18);margin-top:24px;position:relative;z-index:1}
+
+/* اليمين */
+.right{flex:1;background:#fff;display:flex;align-items:center;justify-content:center;padding:44px 52px;overflow-y:auto}
+.card{max-width:440px;width:100%}
+.card-top{text-align:center;margin-bottom:32px}
+.mail-ico{width:80px;height:80px;background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(124,58,237,.06));border:2px solid rgba(37,99,235,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.mail-ico i{font-size:2.3rem;color:var(--p)}
+.card-title{font-size:1.5rem;font-weight:900;color:var(--dk);margin-bottom:8px}
+.card-sub{font-size:.88rem;color:var(--mu);line-height:1.65}
+.email-box{display:inline-flex;align-items:center;gap:8px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:8px 16px;font-size:.85rem;font-weight:700;color:var(--p);margin-top:10px;direction:ltr}
+
+/* خانات الأرقام */
+.otp-label{font-size:.8rem;font-weight:700;color:var(--tx);margin-bottom:12px;text-align:center}
+.otp-wrap{display:flex;gap:10px;justify-content:center;margin-bottom:8px;direction:ltr}
+.otp-d{width:54px;height:62px;border:2px solid var(--bd);border-radius:10px;font-size:1.7rem;font-weight:900;color:var(--dk);text-align:center;outline:none;transition:border-color .2s,box-shadow .2s;background:#fff;font-family:'Tajawal',sans-serif;caret-color:var(--p)}
+.otp-d:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.otp-d.filled{border-color:var(--p);background:#EFF6FF}
+.otp-d.err{border-color:var(--er);background:#FEF2F2}
+
+/* Error / timer */
+.err-msg{display:flex;align-items:center;gap:7px;background:#FEF2F2;border:1px solid rgba(220,38,38,.2);border-radius:8px;padding:9px 13px;font-size:.8rem;color:var(--er);margin-bottom:14px}
+.timer{text-align:center;font-size:.8rem;color:var(--mu);margin-bottom:20px}
+.timer span{font-weight:700;color:var(--p)}
+
+/* Buttons */
+.btn-verify{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:13px;border-radius:10px;background:var(--p);color:#fff;font-size:.93rem;font-weight:700;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(37,99,235,.22);font-family:'Tajawal',sans-serif;margin-bottom:12px}
+.btn-verify:hover{background:var(--pd);transform:translateY(-1px)}
+.btn-verify:disabled{opacity:.5;pointer-events:none;transform:none}
+.btn-resend{width:100%;padding:11px;background:none;border:1.5px solid var(--bd);border-radius:10px;font-size:.85rem;font-weight:600;color:var(--mu);cursor:pointer;transition:all .2s;font-family:'Tajawal',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-resend:hover:not(:disabled){border-color:var(--p);color:var(--p)}
+.btn-resend:disabled{opacity:.45;cursor:not-allowed}
+.back-link{text-align:center;margin-top:20px;font-size:.8rem;color:var(--mu)}
+.back-link a{color:var(--p);font-weight:700}
+
+@media(max-width:768px){.left{display:none}.right{padding:32px 20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- اليسار -->
+  <div class="left">
+    <div class="brand">
+      <img src="{% static 'images/logo-small.png' %}" alt="رابط" class="logo-img">
+      <div class="logo-tx">رابط <span class="logo-tx-en">RABIT</span></div>
+    </div>
+    <div class="left-body">
+      <div class="left-ico-wrap"><i class="ti ti-shield-lock"></i></div>
+      <h2 class="left-title">حسابك<br/><span>محمي وآمن</span></h2>
+      <p class="left-desc">نتحقق من هويتك عبر بريدك الإلكتروني لضمان أمان حسابك على منصة رابط.</p>
+      <div class="left-tips">
+        <div class="tip"><i class="ti ti-mail-check"></i><div class="tip-tx">أرسلنا رمزاً مكوناً من 6 أرقام على بريدك</div></div>
+        <div class="tip"><i class="ti ti-clock"></i><div class="tip-tx">الرمز صالح لمدة 10 دقائق فقط</div></div>
+        <div class="tip"><i class="ti ti-refresh"></i><div class="tip-tx">يمكنك طلب رمز جديد في أي وقت</div></div>
+      </div>
+    </div>
+    <div class="left-foot">© 2024 رابط RABIT — منصة استثمارية سعودية</div>
+  </div>
+
+  <!-- اليمين -->
+  <div class="right">
+    <div class="card">
+
+      <div class="card-top">
+        <div class="mail-ico"><i class="ti ti-mail-forward"></i></div>
+        <h1 class="card-title">أدخل رمز التحقق</h1>
+        <p class="card-sub">أرسلنا رمزاً مكوناً من 6 أرقام إلى</p>
+        <div class="email-box"><i class="ti ti-mail" style="font-size:.9rem"></i> {{ email }}</div>
+      </div>
+
+      {% if error %}
+      <div class="err-msg"><i class="ti ti-alert-circle"></i> {{ error }}</div>
+      {% endif %}
+
+      <!-- نموذج الرمز -->
+      <form method="post" id="otp-form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="verify"/>
+
+        <div class="otp-label">أدخل الرمز المكوّن من 6 أرقام</div>
+        <div class="otp-wrap">
+          <input class="otp-d {% if error %}err{% endif %}" type="text" name="d1" id="d1" maxlength="1" inputmode="numeric" autocomplete="one-time-code"/>
+          <input class="otp-d {% if error %}err{% endif %}" type="text" name="d2" id="d2" maxlength="1" inputmode="numeric"/>
+          <input class="otp-d {% if error %}err{% endif %}" type="text" name="d3" id="d3" maxlength="1" inputmode="numeric"/>
+          <input class="otp-d {% if error %}err{% endif %}" type="text" name="d4" id="d4" maxlength="1" inputmode="numeric"/>
+          <input class="otp-d {% if error %}err{% endif %}" type="text" name="d5" id="d5" maxlength="1" inputmode="numeric"/>
+          <input class="otp-d {% if error %}err{% endif %}" type="text" name="d6" id="d6" maxlength="1" inputmode="numeric"/>
+        </div>
+
+        <div class="timer" id="timer-wrap">
+          ينتهي الرمز خلال <span id="countdown">10:00</span>
+        </div>
+
+        <button type="submit" class="btn-verify" id="btn-verify" disabled>
+          <i class="ti ti-shield-check"></i>
+          تحقق وأكمل التسجيل
+        </button>
+      </form>
+
+      <!-- إعادة الإرسال -->
+      <form method="post" id="resend-form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="resend"/>
+        <button type="submit" class="btn-resend" id="btn-resend">
+          <i class="ti ti-refresh"></i>
+          إعادة إرسال رمز جديد
+        </button>
+      </form>
+
+      <div class="back-link">
+        بريد مختلف؟ <a href="{% url 'accounts:logout' %}">تسجيل خروج وإنشاء حساب جديد</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── خانات الرمز ──
+var inputs = document.querySelectorAll('.otp-d');
+var btnVerify = document.getElementById('btn-verify');
+
+inputs.forEach(function(inp, idx) {
+  inp.addEventListener('input', function() {
+    // السماح بالأرقام فقط
+    this.value = this.value.replace(/\D/g, '');
+    if (this.value) {
+      this.classList.add('filled');
+      if (idx < inputs.length - 1) inputs[idx + 1].focus();
+    } else {
+      this.classList.remove('filled');
+    }
+    // تفعيل زر التحقق لما تكتمل الأرقام
+    var all = Array.from(inputs).every(function(i) { return i.value.length === 1; });
+    btnVerify.disabled = !all;
+  });
+
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && !this.value && idx > 0) {
+      inputs[idx - 1].focus();
+      inputs[idx - 1].value = '';
+      inputs[idx - 1].classList.remove('filled');
+    }
+  });
+
+  // لصق الرمز كامل دفعة واحدة
+  inp.addEventListener('paste', function(e) {
+    var paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+    if (paste.length === 6) {
+      inputs.forEach(function(i, n) {
+        i.value = paste[n] || '';
+        i.classList.toggle('filled', !!i.value);
+      });
+      btnVerify.disabled = false;
+      inputs[5].focus();
+    }
+    e.preventDefault();
+  });
+});
+
+// ── مؤقت العد التنازلي 10 دقائق ──
+var totalSec = 10 * 60;
+var timerEl = document.getElementById('countdown');
+var timerInterval = setInterval(function() {
+  totalSec--;
+  if (totalSec <= 0) {
+    clearInterval(timerInterval);
+    timerEl.parentElement.innerHTML = '<span style="color:var(--er)">انتهت صلاحية الرمز — اضغط إعادة الإرسال</span>';
+    btnVerify.disabled = true;
+    return;
+  }
+  var m = Math.floor(totalSec / 60);
+  var s = totalSec % 60;
+  timerEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+}, 1000);
+
+// ── تركيز تلقائي على الخانة الأولى ──
+document.getElementById('d1').focus();
+</script>
+</body>
+</html>

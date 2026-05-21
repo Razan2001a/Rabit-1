@@ -1,0 +1,56 @@
+{# قائمة جانبية موحّدة للشركة الناشئة — نفس الشكل في كل الصفحات #}
+{% load static %}
+{% with sp=startup_sidebar_profile %}
+<div class="db-score-block">
+  <div class="db-score-row">
+    <span class="db-score-lbl">مستوى الجاهزية الاستثمارية</span>
+    <span class="db-score-num">{{ startup_sidebar_scorecard|default:0 }}/100</span>
+  </div>
+  <div class="db-track"><div class="db-fill" data-width="{{ startup_sidebar_completion|default:0 }}%"></div></div>
+  <div class="db-score-hint">اكتمال الملف: {{ startup_sidebar_completion|default:0 }}%</div>
+  {% if sp %}
+  <div class="db-status-lozenge st-{{ sp.status }}">
+    <i class="ti ti-circle-dot"></i> {{ sp.get_status_display }}
+  </div>
+  {% endif %}
+</div>
+
+<div class="db-nav-s">الرئيسية</div>
+<div class="db-nav-g">
+  <a href="{% url 'dashboard:startup' %}" class="db-na {% if sidebar_active == 'home' %}on{% endif %}"><i class="ti ti-layout-dashboard"></i><span class="db-na-lbl">لوحة التحكم</span></a>
+</div>
+
+<div class="db-nav-s">ملف الشركة</div>
+<div class="db-nav-g">
+  <a href="{% url 'dashboard:startup' %}?page=co" class="db-na {% if sidebar_active == 'co' %}on{% endif %}"><i class="ti ti-building-skyscraper"></i><span class="db-na-lbl">بيانات الشركة</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=fo" class="db-na {% if sidebar_active == 'fo' %}on{% endif %}"><i class="ti ti-users"></i><span class="db-na-lbl">الفريق والمؤسسون</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=docs" class="db-na {% if sidebar_active == 'docs' %}on{% endif %}"><i class="ti ti-file-text"></i><span class="db-na-lbl">المستندات</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=fi" class="db-na {% if sidebar_active == 'fi' %}on{% endif %}"><i class="ti ti-chart-bar"></i><span class="db-na-lbl">البيانات المالية</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=fu" class="db-na {% if sidebar_active == 'fu' %}on{% endif %}"><i class="ti ti-presentation"></i><span class="db-na-lbl">Pitch Deck</span></a>
+</div>
+
+<div class="db-nav-s">التقييم والجاهزية</div>
+<div class="db-nav-g">
+  <a href="{% url 'dashboard:startup' %}?page=check" class="db-na {% if sidebar_active == 'check' %}on{% endif %}"><i class="ti ti-clipboard-check"></i><span class="db-na-lbl">مستوى الجاهزية</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=dd" class="db-na {% if sidebar_active == 'dd' %}on{% endif %}"><i class="ti ti-stairs-up"></i><span class="db-na-lbl">Quick DD</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=submit" class="db-na {% if sidebar_active == 'submit' %}on{% endif %}"><i class="ti ti-send"></i><span class="db-na-lbl">طلب النشر</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=status" class="db-na {% if sidebar_active == 'status' %}on{% endif %}"><i class="ti ti-activity"></i><span class="db-na-lbl">حالة المراجعة</span></a>
+</div>
+
+<div class="db-nav-s">المستثمرون</div>
+<div class="db-nav-g">
+  <a href="{% url 'dashboard:startup' %}?page=dr" class="db-na {% if sidebar_active == 'dr' %}on{% endif %}"><i class="ti ti-lock"></i><span class="db-na-lbl">Data Room</span></a>
+  <a href="{% url 'deals:requests_inbox' %}" class="db-na {% if sidebar_active == 'inv' %}on{% endif %}"><i class="ti ti-inbox"></i><span class="db-na-lbl">طلبات المستثمرين</span>{% if startup_inv_pending %}<span class="db-na-badge nb-wn">{{ startup_inv_pending }}</span>{% endif %}</a>
+  <a href="{% url 'deals:my_deals' %}" class="db-na {% if sidebar_active == 'deals' %}on{% endif %}"><i class="ti ti-handshake"></i><span class="db-na-lbl">صفقاتي</span></a>
+  <a href="{% url 'messaging:index' %}" class="db-na {% if sidebar_active == 'chat' %}on{% endif %}"><i class="ti ti-message-circle"></i><span class="db-na-lbl">المحادثات</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=pitch" class="db-na {% if sidebar_active == 'pitch' %}on{% endif %}"><i class="ti ti-presentation"></i><span class="db-na-lbl">جلسات Pitch</span></a>
+</div>
+
+<div class="db-nav-s">الخدمات</div>
+<div class="db-nav-g">
+  <a href="{% url 'dashboard:startup' %}?page=services" class="db-na {% if sidebar_active == 'services' %}on{% endif %}"><i class="ti ti-briefcase"></i><span class="db-na-lbl">الخدمات الاستشارية</span></a>
+  <a href="{% url 'profiles:startup_bank_account' %}" class="db-na {% if sidebar_active == 'bank' %}on{% endif %}"><i class="ti ti-building-bank"></i><span class="db-na-lbl">الحساب البنكي</span></a>
+  <a href="{% url 'payments:index' %}" class="db-na {% if sidebar_active == 'payments' %}on{% endif %}"><i class="ti ti-wallet"></i><span class="db-na-lbl">المدفوعات</span></a>
+  <a href="{% url 'dashboard:startup' %}?page=settings" class="db-na {% if sidebar_active == 'settings' %}on{% endif %}"><i class="ti ti-settings"></i><span class="db-na-lbl">الإعدادات</span></a>
+</div>
+{% endwith %}
