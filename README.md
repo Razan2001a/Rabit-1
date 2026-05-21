@@ -48,7 +48,7 @@ python manage.py migrate
 python manage.py createsuperuser
 
 # 6. تشغيل الخادم
-python manage.py runserver
+python manage.py runserver  
 ```
 
 افتح المتصفح على: **http://127.0.0.1:8000/**
