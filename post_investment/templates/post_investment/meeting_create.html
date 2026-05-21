@@ -1,0 +1,23 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}اجتماع جديد{% endblock %}
+{% block content %}
+<section class="page-shell-narrow">
+  <div class="card">
+    <div class="card-head"><div class="ch-ico"><i class="ti ti-calendar"></i></div>
+      <div><div class="ch-t">اجتماع مجلس إدارة جديد</div></div></div>
+    <form method="post">
+      {% csrf_token %}
+      <div class="fg"><label class="fl">العنوان</label><input type="text" name="title" class="fi" required></div>
+      <div class="fr">
+        <div><label class="fl">التاريخ والوقت</label><input type="datetime-local" name="scheduled_at" class="fi" required></div>
+        <div><label class="fl">المكان / رابط Zoom</label><input type="text" name="location" class="fi"></div>
+      </div>
+      <div class="fg"><label class="fl">جدول الأعمال</label><textarea name="agenda" class="ft" rows="4"></textarea></div>
+      <div class="form-actions-end gap10">
+        <a href="{% url 'post_investment:ir_dashboard' %}" class="btn btn-o">إلغاء</a>
+        <button type="submit" class="btn btn-p"><i class="ti ti-device-floppy"></i> جدولة الاجتماع</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

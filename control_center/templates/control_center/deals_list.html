@@ -1,0 +1,89 @@
+{% extends 'control_center/base.html' %}
+{% block title %}الصفقات — مركز التحكم{% endblock %}
+{% block page_title %}الصفقات{% endblock %}
+{% block content %}
+
+<div class="cc-stats" style="grid-template-columns:repeat(3,1fr)">
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-handshake"></i> إجمالي الصفقات</div>
+    <div class="cc-stat-val">{{ deals|length }}</div>
+  </div>
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-coin"></i> حجم الاستثمار المُغلق</div>
+    <div class="cc-stat-val">{{ total_closed_amount|floatformat:0 }}</div>
+    <div class="cc-stat-sub">ريال</div>
+  </div>
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-percentage"></i> عمولات المنصة</div>
+    <div class="cc-stat-val" style="color:var(--cc-success)">{{ total_commission|floatformat:0 }}</div>
+    <div class="cc-stat-sub">ريال</div>
+  </div>
+</div>
+
+<div class="cc-page-header">
+  <div class="cc-page-title">جميع الصفقات</div>
+  <form method="get" class="cc-filter-bar">
+    <select class="cc-select" name="status" onchange="this.form.submit()">
+      <option value="">كل الحالات</option>
+      {% for val, label in status_choices %}
+      <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+<div class="cc-card" style="margin-bottom:16px">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead>
+      <tr><th>#</th><th>الشركة</th><th>المستثمر</th><th>المبلغ</th><th>الحصة</th><th>العمولة</th><th>الحالة</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for deal in deals %}
+      <tr>
+        <td style="color:var(--cc-hint)">#{{ deal.pk }}</td>
+        <td style="font-weight:600">{{ deal.investor_request.startup.company_name|default:'—' }}</td>
+        <td>{{ deal.investor_request.investor.get_full_name|default:deal.investor_request.investor.username }}</td>
+        <td>{% if deal.final_amount %}{{ deal.final_amount|floatformat:0 }} ريال{% else %}—{% endif %}</td>
+        <td>{% if deal.final_equity_pct %}{{ deal.final_equity_pct }}%{% else %}—{% endif %}</td>
+        <td style="color:var(--cc-success)">{% if deal.commission_amount %}{{ deal.commission_amount|floatformat:0 }} ريال{% else %}—{% endif %}</td>
+        <td>
+          <span class="cc-badge {% if deal.status == 'closed' %}cc-badge-green{% elif deal.status == 'signed' %}cc-badge-blue{% elif deal.status == 'negotiation' %}cc-badge-yellow{% elif deal.status == 'agreed' %}cc-badge-purple{% else %}cc-badge-red{% endif %}">
+            {{ deal.get_status_display }}
+          </span>
+        </td>
+        <td><a href="{% url 'control_center:deal_detail' deal.pk %}" class="cc-btn cc-btn-sm">تفاصيل</a></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8"><div class="cc-empty"><i class="ti ti-handshake"></i><p>لا يوجد صفقات</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="cc-page-header">
+  <div class="cc-page-title">طلبات وصول المستثمرين المعلقة</div>
+</div>
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead><tr><th>الشركة</th><th>المستثمر</th><th>NDA</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+    <tbody>
+      {% for req in requests_pending %}
+      <tr>
+        <td style="font-weight:600">{{ req.startup.company_name|default:'—' }}</td>
+        <td>{{ req.investor.get_full_name|default:req.investor.username }}</td>
+        <td>{% if req.nda_signed %}<span class="cc-badge cc-badge-green">✓ موقّع</span>{% else %}<span class="cc-badge cc-badge-gray">—</span>{% endif %}</td>
+        <td><span class="cc-badge cc-badge-yellow">{{ req.get_status_display }}</span></td>
+        <td style="font-size:12px;color:var(--cc-hint)">{{ req.created_at|date:"Y/m/d" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--cc-hint)">لا يوجد طلبات معلقة</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

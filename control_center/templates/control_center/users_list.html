@@ -1,0 +1,79 @@
+{% extends 'control_center/base.html' %}
+{% block title %}المستخدمون — مركز التحكم{% endblock %}
+{% block page_title %}إدارة المستخدمين{% endblock %}
+{% block content %}
+
+<div class="cc-page-header">
+  <div class="cc-page-title">المستخدمون ({{ users|length }})</div>
+  <form method="get" class="cc-filter-bar">
+    <input class="cc-input cc-input-search" name="q" placeholder="بحث..." value="{{ search_query }}"/>
+    <select class="cc-select" name="role" onchange="this.form.submit()">
+      <option value="">كل الأدوار</option>
+      <option value="startup"  {% if role_filter == 'startup' %}selected{% endif %}>شركة ناشئة</option>
+      <option value="investor" {% if role_filter == 'investor' %}selected{% endif %}>مستثمر</option>
+      <option value="advisor"  {% if role_filter == 'advisor' %}selected{% endif %}>مستشار</option>
+      <option value="admin"    {% if role_filter == 'admin' %}selected{% endif %}>إدارة</option>
+    </select>
+    <select class="cc-select" name="status" onchange="this.form.submit()">
+      <option value="">كل الحالات</option>
+      <option value="verified"   {% if status_filter == 'verified' %}selected{% endif %}>موثق</option>
+      <option value="unverified" {% if status_filter == 'unverified' %}selected{% endif %}>غير موثق</option>
+    </select>
+    <button type="submit" class="cc-btn cc-btn-primary"><i class="ti ti-search"></i> بحث</button>
+  </form>
+</div>
+
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead>
+      <tr><th>المستخدم</th><th>البريد</th><th>الدور</th><th>التوثيق</th><th>تاريخ التسجيل</th><th>الإجراءات</th></tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>
+          <div class="cc-user-row">
+            <div class="cc-avatar">{{ user.first_name|first|upper|default:user.username|first|upper }}</div>
+            <div>
+              <div class="cc-user-name">{{ user.get_full_name|default:user.username }}</div>
+              <div class="cc-user-email">@{{ user.username }}</div>
+            </div>
+          </div>
+        </td>
+        <td style="color:var(--cc-muted)">{{ user.email }}</td>
+        <td>
+          <span class="cc-badge {% if user.role == 'startup' %}cc-badge-blue{% elif user.role == 'investor' %}cc-badge-green{% elif user.role == 'advisor' %}cc-badge-purple{% else %}cc-badge-yellow{% endif %}">
+            {{ user.get_role_display }}
+          </span>
+        </td>
+        <td>
+          {% if user.is_verified %}
+            <span class="cc-badge cc-badge-green">✓ موثق</span>
+          {% else %}
+            <span class="cc-badge cc-badge-gray">— غير موثق</span>
+          {% endif %}
+        </td>
+        <td style="color:var(--cc-hint);font-size:12px">{{ user.date_joined|date:"Y/m/d" }}</td>
+        <td>
+          <div class="cc-action-bar">
+            <a href="{% url 'control_center:user_toggle_verify' user.pk %}" class="cc-btn cc-btn-sm {% if user.is_verified %}cc-btn-warn{% else %}cc-btn-success{% endif %}">
+              {% if user.is_verified %}إلغاء التوثيق{% else %}توثيق{% endif %}
+            </a>
+            <form method="post" action="{% url 'control_center:user_delete' user.pk %}" style="display:inline"
+                  onsubmit="return confirm('هل أنت متأكد من حذف هذا المستخدم؟')">
+              {% csrf_token %}
+              <button type="submit" class="cc-btn cc-btn-sm cc-btn-danger"><i class="ti ti-trash"></i></button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6"><div class="cc-empty"><i class="ti ti-users"></i><p>لا يوجد مستخدمون</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

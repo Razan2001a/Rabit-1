@@ -1,0 +1,24 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}{{ report.title }}{% endblock %}
+{% block content %}
+<section class="page-shell-narrow">
+  <div class="card">
+    <div class="card-head"><div class="ch-ico"><i class="ti ti-report"></i></div>
+      <div><div class="ch-t">{{ report.title }}</div>
+        <div class="ch-s">{{ report.startup.company_name }} • {{ report.get_period_display }} • {{ report.sent_at|date:'Y-m-d' }}</div></div></div>
+
+    <h3>الملخص التنفيذي</h3>
+    <p>{{ report.summary|linebreaksbr }}</p>
+
+    <div class="g3">
+      <div class="opp-stat-box"><div class="opp-stat-v v-p">{{ report.revenue|default:'—' }}</div><div class="opp-stat-l">الإيرادات</div></div>
+      <div class="opp-stat-box"><div class="opp-stat-v v-wn">{{ report.runway_months }}</div><div class="opp-stat-l">Runway (شهور)</div></div>
+      <div class="opp-stat-box"><div class="opp-stat-v v-ok">{{ report.customers_count }}</div><div class="opp-stat-l">العملاء</div></div>
+    </div>
+
+    {% if report.achievements %}<h3>الإنجازات</h3><p>{{ report.achievements|linebreaksbr }}</p>{% endif %}
+    {% if report.challenges %}<h3>التحديات</h3><p>{{ report.challenges|linebreaksbr }}</p>{% endif %}
+    {% if report.file %}<p><a href="{{ report.file.url }}" target="_blank" class="btn btn-o"><i class="ti ti-download"></i> تحميل ملف PDF</a></p>{% endif %}
+  </div>
+</section>
+{% endblock %}

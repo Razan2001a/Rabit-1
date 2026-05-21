@@ -1,0 +1,96 @@
+{% extends 'control_center/base.html' %}
+{% block title %}تعديل نقاط {{ startup.company_name }} — مركز التحكم{% endblock %}
+{% block page_title %}تعديل Scorecard{% endblock %}
+{% block content %}
+
+<div class="cc-page-header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <a href="{% url 'control_center:scoring_list' %}" class="cc-btn cc-btn-sm"><i class="ti ti-arrow-right"></i> رجوع</a>
+    <div class="cc-page-title">{{ startup.company_name|default:'شركة' }}</div>
+  </div>
+</div>
+
+<div class="cc-grid-2">
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">تعديل النقاط (0–10 لكل معيار)</span></div>
+    <div class="cc-card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="cc-score-row">
+          <span class="cc-score-label">قوة الفريق</span>
+          <input type="range" min="0" max="10" step="1" name="team_strength" value="{{ score.team_strength }}"
+                 oninput="document.getElementById('v_team').textContent=this.value;updateTotal()"/>
+          <span class="cc-score-val" id="v_team">{{ score.team_strength }}</span>
+        </div>
+        <div class="cc-score-row">
+          <span class="cc-score-label">نموذج الأعمال</span>
+          <input type="range" min="0" max="10" step="1" name="business_model" value="{{ score.business_model }}"
+                 oninput="document.getElementById('v_bm').textContent=this.value;updateTotal()"/>
+          <span class="cc-score-val" id="v_bm">{{ score.business_model }}</span>
+        </div>
+        <div class="cc-score-row">
+          <span class="cc-score-label">حجم السوق</span>
+          <input type="range" min="0" max="10" step="1" name="market_size" value="{{ score.market_size }}"
+                 oninput="document.getElementById('v_ms').textContent=this.value;updateTotal()"/>
+          <span class="cc-score-val" id="v_ms">{{ score.market_size }}</span>
+        </div>
+        <div class="cc-score-row">
+          <span class="cc-score-label">الإيرادات</span>
+          <input type="range" min="0" max="10" step="1" name="revenues" value="{{ score.revenues }}"
+                 oninput="document.getElementById('v_rev').textContent=this.value;updateTotal()"/>
+          <span class="cc-score-val" id="v_rev">{{ score.revenues }}</span>
+        </div>
+        <div class="cc-score-row">
+          <span class="cc-score-label">الجاهزية القانونية</span>
+          <input type="range" min="0" max="10" step="1" name="legal_readiness" value="{{ score.legal_readiness }}"
+                 oninput="document.getElementById('v_leg').textContent=this.value;updateTotal()"/>
+          <span class="cc-score-val" id="v_leg">{{ score.legal_readiness }}</span>
+        </div>
+        <div class="cc-score-row">
+          <span class="cc-score-label">المنتج التقني</span>
+          <input type="range" min="0" max="10" step="1" name="tech_product" value="{{ score.tech_product }}"
+                 oninput="document.getElementById('v_tech').textContent=this.value;updateTotal()"/>
+          <span class="cc-score-val" id="v_tech">{{ score.tech_product }}</span>
+        </div>
+        <div class="cc-score-total">
+          <span class="cc-score-total-label">المجموع الكلي</span>
+          <span class="cc-score-total-val" id="total_display">{{ score.total }}</span>
+        </div>
+        <div class="cc-form-group">
+          <label class="cc-form-label">ملاحظات الإدارة</label>
+          <textarea class="cc-form-control" name="admin_notes" rows="4">{{ score.admin_notes }}</textarea>
+        </div>
+        <button type="submit" class="cc-btn cc-btn-primary" style="width:100%;justify-content:center">
+          <i class="ti ti-device-floppy"></i> حفظ التقييم
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">بيانات الشركة</span></div>
+    <div class="cc-card-body">
+      <table class="cc-table">
+        <tr><td style="color:var(--cc-hint)">الاسم</td><td><strong>{{ startup.company_name|default:'—' }}</strong></td></tr>
+        <tr><td style="color:var(--cc-hint)">القطاع</td><td>{{ startup.sector|default:'—' }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">المرحلة</td><td><span class="cc-badge cc-badge-blue">{{ startup.get_stage_display }}</span></td></tr>
+        <tr><td style="color:var(--cc-hint)">الحالة</td><td>{{ startup.get_status_display }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">الإيراد الشهري</td><td>{% if startup.revenue_monthly %}{{ startup.revenue_monthly|floatformat:0 }}{% else %}—{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">التقييم المالي</td><td>{% if startup.valuation %}{{ startup.valuation|floatformat:0 }}{% else %}—{% endif %}</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% block extra_js %}
+<script>
+function updateTotal() {
+  const vals = ['v_team','v_bm','v_ms','v_rev','v_leg','v_tech'];
+  let sum = 0;
+  vals.forEach(id => { sum += parseInt(document.getElementById(id).textContent || 0); });
+  document.getElementById('total_display').textContent = Math.round(sum * 100 / 60);
+}
+</script>
+{% endblock %}
+
+{% endblock %}

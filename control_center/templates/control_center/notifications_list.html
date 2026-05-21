@@ -1,0 +1,74 @@
+{% extends 'control_center/base.html' %}
+{% block title %}الإشعارات — مركز التحكم{% endblock %}
+{% block page_title %}الإشعارات{% endblock %}
+{% block content %}
+
+<div class="cc-grid-2">
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">إرسال إشعار جماعي</span></div>
+    <div class="cc-card-body">
+      <form method="post" action="{% url 'control_center:send_notification' %}">
+        {% csrf_token %}
+        <div class="cc-form-group">
+          <label class="cc-form-label">المستلمون</label>
+          <select class="cc-form-control" name="target">
+            <option value="all">كل المستخدمين</option>
+            <option value="startup">الشركات الناشئة</option>
+            <option value="investor">المستثمرون</option>
+            <option value="advisor">المستشارون</option>
+          </select>
+        </div>
+        <div class="cc-form-group">
+          <label class="cc-form-label">نوع الإشعار</label>
+          <select class="cc-form-control" name="kind">
+            <option value="info">معلوماتي</option>
+            <option value="approval">اعتماد</option>
+            <option value="rejection">رفض</option>
+            <option value="deal">صفقة</option>
+            <option value="payment">دفع</option>
+          </select>
+        </div>
+        <div class="cc-form-group">
+          <label class="cc-form-label">العنوان *</label>
+          <input class="cc-form-control" name="title" placeholder="عنوان الإشعار..." required/>
+        </div>
+        <div class="cc-form-group">
+          <label class="cc-form-label">التفاصيل</label>
+          <textarea class="cc-form-control" name="body" rows="4" placeholder="نص الإشعار..."></textarea>
+        </div>
+        <div class="cc-form-group">
+          <label class="cc-form-label">الرابط (اختياري)</label>
+          <input class="cc-form-control" name="link" placeholder="/dashboard/startup/"/>
+        </div>
+        <button type="submit" class="cc-btn cc-btn-primary" style="width:100%;justify-content:center">
+          <i class="ti ti-send"></i> إرسال الإشعار
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">آخر الإشعارات المُرسَلة</span></div>
+    <table class="cc-table">
+      <thead><tr><th>المستلم</th><th>العنوان</th><th>النوع</th><th>الوقت</th></tr></thead>
+      <tbody>
+        {% for notif in recent_notifications %}
+        <tr>
+          <td style="font-size:12px">{{ notif.user.get_full_name|default:notif.user.username|truncatechars:20 }}</td>
+          <td style="font-size:12px">{{ notif.title|truncatechars:35 }}</td>
+          <td>
+            <span class="cc-badge {% if notif.kind == 'approval' %}cc-badge-green{% elif notif.kind == 'rejection' %}cc-badge-red{% elif notif.kind == 'deal' %}cc-badge-blue{% else %}cc-badge-gray{% endif %}">
+              {{ notif.get_kind_display }}
+            </span>
+          </td>
+          <td style="font-size:11px;color:var(--cc-hint)">{{ notif.created_at|timesince }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--cc-hint)">لا يوجد إشعارات</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>{% block title %}مركز التحكم — رابط{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<link rel="stylesheet" href="{% static 'control_center/css/control_center.css' %}"/>
+</head>
+<body class="cc-body">
+<div class="cc-layout">
+
+  <aside class="cc-sidebar">
+    <div class="cc-brand">
+      <div class="cc-brand-name">رابط RABIT</div>
+      <div class="cc-brand-sub">مركز التحكم الإداري</div>
+      <div class="cc-admin-chip">
+        <i class="ti ti-crown"></i>
+        {{ request.user.get_full_name|default:request.user.username }}
+      </div>
+    </div>
+
+    <div class="cc-sb-section">الرئيسية</div>
+    <a href="{% url 'control_center:dashboard' %}" class="cc-nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+      <i class="ti ti-layout-dashboard"></i> نظرة عامة
+    </a>
+
+    <div class="cc-sb-section">المستخدمون</div>
+    <a href="{% url 'control_center:users_list' %}" class="cc-nav-item {% if active_page == 'users' %}active{% endif %}">
+      <i class="ti ti-users"></i> إدارة المستخدمين
+    </a>
+    <a href="{% url 'control_center:startups_list' %}" class="cc-nav-item {% if active_page == 'startups' %}active{% endif %}">
+      <i class="ti ti-rocket"></i> الشركات الناشئة
+      {% if pending_start %}<span class="cc-nav-badge">{{ pending_start }}</span>{% endif %}
+    </a>
+    <a href="{% url 'control_center:investors_list' %}" class="cc-nav-item {% if active_page == 'investors' %}active{% endif %}">
+      <i class="ti ti-coins"></i> المستثمرون
+    </a>
+    <a href="{% url 'control_center:advisors_list' %}" class="cc-nav-item {% if active_page == 'advisors' %}active{% endif %}">
+      <i class="ti ti-school"></i> المستشارون
+    </a>
+
+    <div class="cc-sb-section">العمليات</div>
+    <a href="{% url 'control_center:kyc_list' %}" class="cc-nav-item {% if active_page == 'kyc' %}active{% endif %}">
+      <i class="ti ti-id"></i> مراجعة KYC
+      {% if pending_kyc %}<span class="cc-nav-badge">{{ pending_kyc }}</span>{% endif %}
+    </a>
+    <a href="{% url 'control_center:deals_list' %}" class="cc-nav-item {% if active_page == 'deals' %}active{% endif %}">
+      <i class="ti ti-handshake"></i> الصفقات
+    </a>
+    <a href="{% url 'control_center:scoring_list' %}" class="cc-nav-item {% if active_page == 'scoring' %}active{% endif %}">
+      <i class="ti ti-award"></i> التقييم والنقاط
+    </a>
+    <a href="{% url 'control_center:advisory_list' %}" class="cc-nav-item {% if active_page == 'advisory' %}active{% endif %}">
+      <i class="ti ti-message-dots"></i> طلبات الاستشارة
+    </a>
+
+    <div class="cc-sb-section">المالية والبيانات</div>
+    <a href="{% url 'control_center:payments_list' %}" class="cc-nav-item {% if active_page == 'payments' %}active{% endif %}">
+      <i class="ti ti-credit-card"></i> المدفوعات
+    </a>
+    <a href="{% url 'control_center:dataroom_list' %}" class="cc-nav-item {% if active_page == 'dataroom' %}active{% endif %}">
+      <i class="ti ti-database"></i> Data Room
+      {% if pending_dl %}<span class="cc-nav-badge">{{ pending_dl }}</span>{% endif %}
+    </a>
+    <a href="{% url 'control_center:notifications_list' %}" class="cc-nav-item {% if active_page == 'notifications' %}active{% endif %}">
+      <i class="ti ti-bell"></i> الإشعارات
+    </a>
+    <a href="{% url 'control_center:post_investment' %}" class="cc-nav-item {% if active_page == 'post_investment' %}active{% endif %}">
+      <i class="ti ti-chart-line"></i> ما بعد الاستثمار
+    </a>
+
+    <div class="cc-sb-footer">
+      <a href="/" class="cc-nav-item"><i class="ti ti-home"></i> الموقع الرئيسي</a>
+      <a href="{% url 'accounts:logout' %}" class="cc-nav-item" style="color:#b91c1c">
+        <i class="ti ti-logout"></i> تسجيل الخروج
+      </a>
+    </div>
+  </aside>
+
+  <div class="cc-main">
+    <div class="cc-topbar">
+      <div class="cc-topbar-title">{% block page_title %}مركز التحكم{% endblock %}</div>
+      <div class="cc-top-chip"><i class="ti ti-users"></i> <strong>{{ total_users }}</strong> مستخدم</div>
+      <div class="cc-top-chip"><i class="ti ti-coin"></i> <strong>{{ total_revenue|floatformat:0 }}</strong> ريال</div>
+     <a href="{% url 'control_center:admin_profile' %}" style="display:flex;align-items:center;gap:8px;text-decoration:none;direction:ltr">
+        <div style="text-align:right">
+          <div style="font-size:12px;font-weight:600;color:var(--cc-text)">{{ request.user.get_full_name|default:request.user.username }}</div>
+          <div style="font-size:10px;color:var(--cc-hint)">مدير النظام</div>
+        </div>
+        {% if request.user.avatar %}
+          <img src="{{ request.user.avatar.url }}" style="width:32px;height:32px;border-radius:50%;object-fit:cover"/>
+        {% else %}
+          <div class="cc-topbar-av">{{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}</div>
+        {% endif %}
+      </a>
+    </div>
+
+    <div class="cc-content">
+      {% if messages %}
+      <div class="cc-messages">
+        {% for message in messages %}
+        <div class="cc-alert cc-alert-{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}danger{% elif message.tags == 'warning' %}warn{% else %}info{% endif %}">
+          <i class="ti {% if message.tags == 'success' %}ti-circle-check{% elif message.tags == 'error' %}ti-alert-circle{% elif message.tags == 'warning' %}ti-alert-triangle{% else %}ti-info-circle{% endif %}"></i>
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+
+</div>
+<script>
+function ccTab(btn, tabId, group) {
+  document.querySelectorAll('.cc-tab[data-group="'+group+'"]').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cc-tab-content[data-group="'+group+'"]').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

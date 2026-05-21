@@ -1,0 +1,51 @@
+{% extends 'control_center/base.html' %}
+{% block title %}التقييم — مركز التحكم{% endblock %}
+{% block page_title %}تقييم الشركات{% endblock %}
+{% block content %}
+
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead>
+      <tr><th>الشركة</th><th>القطاع</th><th>المرحلة</th><th>النقاط</th><th>التوزيع</th><th>الحالة</th><th>الإجراءات</th></tr>
+    </thead>
+    <tbody>
+      {% for s in startups %}
+      <tr>
+        <td>
+          <div class="cc-user-row">
+            <div class="cc-avatar" style="background:#eff6ff;color:#1e40af">{{ s.company_name|first|default:'؟' }}</div>
+            <div>
+              <div class="cc-user-name">{{ s.company_name|default:'—' }}</div>
+              <div class="cc-user-email">{{ s.user.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td style="color:var(--cc-muted)">{{ s.sector|default:'—' }}</td>
+        <td><span class="cc-badge cc-badge-blue">{{ s.get_stage_display }}</span></td>
+        <td><strong style="font-size:16px">{{ s.scorecard }}</strong><span style="color:var(--cc-hint)">/100</span></td>
+        <td style="min-width:120px">
+          <div class="cc-progress">
+            <div class="cc-progress-fill" style="width:{{ s.scorecard }}%;background:{% if s.scorecard >= 80 %}#15803d{% elif s.scorecard >= 50 %}#b45309{% else %}#b91c1c{% endif %}"></div>
+          </div>
+        </td>
+        <td>
+          <span class="cc-badge {% if s.status == 'listed' %}cc-badge-green{% elif s.status == 'review' %}cc-badge-yellow{% elif s.status == 'rejected' %}cc-badge-red{% else %}cc-badge-gray{% endif %}">
+            {{ s.get_status_display }}
+          </span>
+        </td>
+        <td>
+          <a href="{% url 'control_center:scoring_edit' s.pk %}" class="cc-btn cc-btn-sm cc-btn-primary">
+            <i class="ti ti-edit"></i> تعديل
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7"><div class="cc-empty"><i class="ti ti-award"></i><p>لا يوجد شركات</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

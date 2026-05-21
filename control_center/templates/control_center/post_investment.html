@@ -1,0 +1,89 @@
+{% extends 'control_center/base.html' %}
+{% block title %}ما بعد الاستثمار — مركز التحكم{% endblock %}
+{% block page_title %}ما بعد الاستثمار{% endblock %}
+{% block content %}
+
+<div class="cc-tabs">
+  <button class="cc-tab active" data-group="pi" onclick="ccTab(this,'pi-reports','pi')">التقارير الدورية ({{ reports|length }})</button>
+  <button class="cc-tab" data-group="pi" onclick="ccTab(this,'pi-meetings','pi')">اجتماعات مجلس الإدارة ({{ meetings|length }})</button>
+  <button class="cc-tab" data-group="pi" onclick="ccTab(this,'pi-kpis','pi')">KPI Snapshots ({{ kpis|length }})</button>
+</div>
+
+<div id="pi-reports" class="cc-tab-content active" data-group="pi">
+  <div class="cc-card">
+    <div class="cc-table-wrap">
+    <table class="cc-table">
+      <thead><tr><th>الشركة</th><th>العنوان</th><th>الفترة</th><th>الإيرادات</th><th>Burn Rate</th><th>Runway</th><th>العملاء</th><th>الملف</th></tr></thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td style="font-weight:600">{{ r.startup.company_name|default:'—' }}</td>
+          <td style="font-size:12px">{{ r.title }}</td>
+          <td><span class="cc-badge cc-badge-purple">{{ r.get_period_display }}</span></td>
+          <td style="color:var(--cc-success)">{% if r.revenue %}{{ r.revenue|floatformat:0 }}{% else %}—{% endif %}</td>
+          <td style="color:var(--cc-danger)">{% if r.burn_rate %}{{ r.burn_rate|floatformat:0 }}{% else %}—{% endif %}</td>
+          <td>{% if r.runway_months %}{{ r.runway_months }} شهر{% else %}—{% endif %}</td>
+          <td>{{ r.customers_count }}</td>
+          <td>{% if r.file %}<a href="{{ r.file.url }}" target="_blank" class="cc-btn cc-btn-sm"><i class="ti ti-download"></i></a>{% else %}—{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8"><div class="cc-empty"><i class="ti ti-file-text"></i><p>لا يوجد تقارير</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div id="pi-meetings" class="cc-tab-content" data-group="pi">
+  <div class="cc-card">
+    <div class="cc-table-wrap">
+    <table class="cc-table">
+      <thead><tr><th>الشركة</th><th>عنوان الاجتماع</th><th>الموعد</th><th>المكان</th></tr></thead>
+      <tbody>
+        {% for m in meetings %}
+        <tr>
+          <td style="font-weight:600">{{ m.startup.company_name|default:'—' }}</td>
+          <td>{{ m.title }}</td>
+          <td style="font-size:12px">{{ m.scheduled_at|date:"Y/m/d H:i" }}</td>
+          <td style="font-size:12px;color:var(--cc-muted)">{{ m.location|default:'—' }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4"><div class="cc-empty"><i class="ti ti-calendar"></i><p>لا يوجد اجتماعات</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div id="pi-kpis" class="cc-tab-content" data-group="pi">
+  <div class="cc-card">
+    <div class="cc-table-wrap">
+    <table class="cc-table">
+      <thead><tr><th>الشركة</th><th>التاريخ</th><th>MRR</th><th>ARR</th><th>CAC</th><th>LTV</th><th>Churn %</th></tr></thead>
+      <tbody>
+        {% for k in kpis %}
+        <tr>
+          <td style="font-weight:600">{{ k.startup.company_name|default:'—' }}</td>
+          <td style="font-size:12px;color:var(--cc-hint)">{{ k.snapshot_date|date:"Y/m/d" }}</td>
+          <td style="color:var(--cc-success)">{% if k.mrr %}{{ k.mrr|floatformat:0 }}{% else %}—{% endif %}</td>
+          <td style="color:var(--cc-success)">{% if k.arr %}{{ k.arr|floatformat:0 }}{% else %}—{% endif %}</td>
+          <td>{% if k.cac %}{{ k.cac|floatformat:0 }}{% else %}—{% endif %}</td>
+          <td style="color:var(--cc-accent)">{% if k.ltv %}{{ k.ltv|floatformat:0 }}{% else %}—{% endif %}</td>
+          <td>
+            {% if k.churn_pct %}
+            <strong style="color:{% if k.churn_pct > 5 %}var(--cc-danger){% else %}var(--cc-warn){% endif %}">{{ k.churn_pct }}%</strong>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7"><div class="cc-empty"><i class="ti ti-chart-line"></i><p>لا يوجد KPIs</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

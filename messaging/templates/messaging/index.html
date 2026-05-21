@@ -1,0 +1,62 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}المحادثات{% endblock %}
+{% block content %}
+<section class="page-shell" style="max-width:760px;margin:0 auto;padding:24px">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div>
+      <h2 style="font-size:18px;font-weight:700;color:#1a1a2e;margin-bottom:4px">محادثات الإغلاق</h2>
+      <p style="font-size:13px;color:#6b7280">نقاش بيانات Data Room بين الشركات الناشئة والمستثمرين</p>
+    </div>
+  </div>
+
+  {% if conversations %}
+    <div style="display:flex;flex-direction:column;gap:10px">
+      {% for c in conversations %}
+      <a href="{% url 'messaging:chat' c.pk %}"
+        style="background:#fff;border:1px solid #e8e8f0;border-radius:12px;padding:16px 20px;
+               display:flex;align-items:center;gap:14px;text-decoration:none;
+               transition:box-shadow .15s,border-color .15s"
+        onmouseover="this.style.boxShadow='0 4px 16px rgba(79,70,229,.1)';this.style.borderColor='#c7d2fe'"
+        onmouseout="this.style.boxShadow='none';this.style.borderColor='#e8e8f0'">
+
+        <div style="width:46px;height:46px;border-radius:50%;background:#eef2ff;
+                    display:flex;align-items:center;justify-content:center;
+                    font-size:18px;font-weight:700;color:#4f46e5;flex-shrink:0">
+          <i class="ti ti-messages"></i>
+        </div>
+
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:600;color:#1a1a2e;margin-bottom:3px">
+            {{ c.request.startup.company_name|default:c.request.startup.user.username }}
+            <span style="color:#d1d5db;margin:0 4px">↔</span>
+            {{ c.request.investor.get_full_name|default:c.request.investor.username }}
+          </div>
+          <div style="font-size:13px;color:#6b7280">
+            {{ c.messages.count }} رسالة · {{ c.created_at|date:"Y-m-d" }}
+          </div>
+        </div>
+
+        {% if c.is_closed %}
+          <span style="background:#f3f4f6;color:#6b7280;font-size:11px;font-weight:600;
+                       padding:3px 10px;border-radius:12px">منتهية</span>
+        {% else %}
+          <span style="background:#dcfce7;color:#166534;font-size:11px;font-weight:600;
+                       padding:3px 10px;border-radius:12px">نشطة</span>
+        {% endif %}
+
+        <i class="ti ti-chevron-left" style="color:#d1d5db;font-size:18px"></i>
+      </a>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <div style="text-align:center;padding:64px 24px;color:#9ca3af">
+      <i class="ti ti-messages" style="font-size:52px;display:block;margin-bottom:16px;opacity:.35"></i>
+      <p style="font-size:15px;color:#6b7280;font-weight:500;margin-bottom:6px">لا توجد محادثات بعد</p>
+      <small>ستظهر هنا بعد قبول طلبات المستثمرين</small>
+    </div>
+  {% endif %}
+
+</section>
+{% endblock %}

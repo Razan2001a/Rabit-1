@@ -1,0 +1,78 @@
+{% extends 'control_center/base.html' %}
+{% block title %}المدفوعات — مركز التحكم{% endblock %}
+{% block page_title %}المدفوعات{% endblock %}
+{% block content %}
+
+<div class="cc-stats">
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-credit-card"></i> إجمالي المدفوعات</div>
+    <div class="cc-stat-val">{{ total_paid|floatformat:0 }}</div>
+    <div class="cc-stat-sub">ريال سعودي</div>
+  </div>
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-school"></i> خدمات استشارية</div>
+    <div class="cc-stat-val">{{ total_service|floatformat:0 }}</div>
+  </div>
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-handshake"></i> عمولات الصفقات</div>
+    <div class="cc-stat-val">{{ total_deal|floatformat:0 }}</div>
+  </div>
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-clock"></i> قيد الانتظار</div>
+    <div class="cc-stat-val" style="color:var(--cc-warn)">{{ total_pending|floatformat:0 }}</div>
+  </div>
+</div>
+
+<div class="cc-page-header">
+  <div class="cc-page-title">سجل المدفوعات ({{ payments|length }})</div>
+  <form method="get" class="cc-filter-bar">
+    <select class="cc-select" name="kind" onchange="this.form.submit()">
+      <option value="">كل الأنواع</option>
+      {% for val, label in kind_choices %}
+      <option value="{{ val }}" {% if kind_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <select class="cc-select" name="status" onchange="this.form.submit()">
+      <option value="">كل الحالات</option>
+      {% for val, label in status_choices %}
+      <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead>
+      <tr><th>المرجع</th><th>الدافع</th><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>الحالة</th><th>التاريخ</th></tr>
+    </thead>
+    <tbody>
+      {% for p in payments %}
+      <tr>
+        <td style="font-family:monospace;font-size:11px;color:var(--cc-hint)">{{ p.reference|default:"—" }}</td>
+        <td>
+          <div class="cc-user-row">
+            <div class="cc-avatar">{{ p.payer.first_name|first|upper|default:p.payer.username|first|upper }}</div>
+            <span>{{ p.payer.get_full_name|default:p.payer.username }}</span>
+          </div>
+        </td>
+        <td><span class="cc-badge cc-badge-blue">{{ p.get_kind_display }}</span></td>
+        <td style="font-size:12px;color:var(--cc-muted)">{{ p.description|truncatechars:40 }}</td>
+        <td style="font-weight:600">{{ p.amount|floatformat:0 }} ريال</td>
+        <td>
+          <span class="cc-badge {% if p.status == 'paid' %}cc-badge-green{% elif p.status == 'pending' %}cc-badge-yellow{% elif p.status == 'failed' %}cc-badge-red{% else %}cc-badge-gray{% endif %}">
+            {{ p.get_status_display }}
+          </span>
+        </td>
+        <td style="font-size:12px;color:var(--cc-hint)">{{ p.created_at|date:"Y/m/d" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7"><div class="cc-empty"><i class="ti ti-credit-card"></i><p>لا يوجد مدفوعات</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

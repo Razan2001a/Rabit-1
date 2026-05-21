@@ -1,0 +1,129 @@
+{% extends 'control_center/base.html' %}
+{% block title %}Data Room — مركز التحكم{% endblock %}
+{% block page_title %}إدارة Data Room{% endblock %}
+{% block content %}
+
+{% if dl_requests %}
+<div class="cc-alert cc-alert-warn">
+  <i class="ti ti-download"></i>
+  يوجد <strong>{{ dl_requests|length }}</strong> طلب تحميل ينتظر الموافقة.
+</div>
+{% endif %}
+
+<div class="cc-tabs">
+  <button class="cc-tab active" data-group="dr" onclick="ccTab(this,'dr-files','dr')">الملفات ({{ files|length }})</button>
+  <button class="cc-tab" data-group="dr" onclick="ccTab(this,'dr-dl','dr')">طلبات التحميل ({{ dl_requests|length }})</button>
+  <button class="cc-tab" data-group="dr" onclick="ccTab(this,'dr-logs','dr')">سجلات الوصول</button>
+  <button class="cc-tab" data-group="dr" onclick="ccTab(this,'dr-nda','dr')">توقيعات NDA</button>
+</div>
+
+<div id="dr-files" class="cc-tab-content active" data-group="dr">
+  <div class="cc-card">
+    <div class="cc-table-wrap">
+    <table class="cc-table">
+      <thead><tr><th>الملف</th><th>الشركة</th><th>مستوى الوصول</th><th>Watermark</th><th>يحتاج موافقة</th><th>تاريخ الرفع</th></tr></thead>
+      <tbody>
+        {% for f in files %}
+        <tr>
+          <td style="font-size:12px"><i class="ti ti-file" style="color:var(--cc-muted);margin-left:6px"></i>{{ f.name|truncatechars:40 }}</td>
+          <td style="font-size:12px">{{ f.startup.company_name|default:'—' }}</td>
+          <td><span class="cc-badge {% if f.access == 'public' %}cc-badge-green{% elif f.access == 'private' %}cc-badge-red{% else %}cc-badge-yellow{% endif %}">{{ f.get_access_display }}</span></td>
+          <td>{% if f.watermark_enabled %}<i class="ti ti-check" style="color:var(--cc-success)"></i>{% else %}<i class="ti ti-x" style="color:var(--cc-hint)"></i>{% endif %}</td>
+          <td>{% if f.download_requires_approval %}<i class="ti ti-check" style="color:var(--cc-success)"></i>{% else %}<i class="ti ti-x" style="color:var(--cc-hint)"></i>{% endif %}</td>
+          <td style="font-size:12px;color:var(--cc-hint)">{{ f.uploaded_at|date:"Y/m/d" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6"><div class="cc-empty"><i class="ti ti-folder"></i><p>لا يوجد ملفات</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div id="dr-dl" class="cc-tab-content" data-group="dr">
+  {% if dl_requests %}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    {% for dr in dl_requests %}
+    <div class="cc-card">
+      <div class="cc-card-head">
+        <div>
+          <div class="cc-user-name">{{ dr.requester.get_full_name|default:dr.requester.username }}</div>
+          <div class="cc-user-email">{{ dr.file.name|truncatechars:40 }}</div>
+        </div>
+        <span class="cc-badge cc-badge-yellow">انتظار</span>
+      </div>
+      <div class="cc-card-body">
+        {% if dr.reason %}<p style="font-size:12px;color:var(--cc-muted);margin-bottom:12px">{{ dr.reason }}</p>{% endif %}
+        <div style="display:flex;gap:8px">
+          <form method="post" action="{% url 'control_center:dl_request_action' dr.pk %}" style="flex:1">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="approve"/>
+            <button type="submit" class="cc-btn cc-btn-success" style="width:100%;justify-content:center"><i class="ti ti-check"></i> موافقة</button>
+          </form>
+          <form method="post" action="{% url 'control_center:dl_request_action' dr.pk %}" style="flex:1">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="reject"/>
+            <button type="submit" class="cc-btn cc-btn-danger" style="width:100%;justify-content:center"><i class="ti ti-x"></i> رفض</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="cc-card"><div class="cc-empty"><i class="ti ti-download"></i><p>لا يوجد طلبات تحميل معلقة</p></div></div>
+  {% endif %}
+</div>
+
+<div id="dr-logs" class="cc-tab-content" data-group="dr">
+  <div class="cc-card">
+    <div class="cc-table-wrap">
+    <table class="cc-table">
+      <thead><tr><th>المستخدم</th><th>الملف</th><th>الإجراء</th><th>IP</th><th>التوقيت</th></tr></thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td>{{ log.user.get_full_name|default:log.user.username }}</td>
+          <td style="font-size:11px;color:var(--cc-muted)">{{ log.file.name|truncatechars:35 }}</td>
+          <td><span class="cc-badge {% if log.action == 'view' %}cc-badge-blue{% else %}cc-badge-green{% endif %}">{{ log.get_action_display }}</span></td>
+          <td style="font-family:monospace;font-size:11px;color:var(--cc-hint)">{{ log.ip_address|default:'—' }}</td>
+          <td style="font-size:11px;color:var(--cc-hint)">{{ log.timestamp|date:"Y/m/d H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5"><div class="cc-empty"><i class="ti ti-list"></i><p>لا يوجد سجلات</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div id="dr-nda" class="cc-tab-content" data-group="dr">
+  <div class="cc-card">
+    <div class="cc-table-wrap">
+    <table class="cc-table">
+      <thead><tr><th>المستثمر</th><th>الشركة</th><th>تاريخ التوقيع</th><th>تاريخ الانتهاء</th><th>الحالة</th></tr></thead>
+      <tbody>
+        {% for nda in ndas %}
+        <tr>
+          <td>{{ nda.investor.get_full_name|default:nda.investor.username }}</td>
+          <td>{{ nda.startup.company_name|default:'—' }}</td>
+          <td style="font-size:12px">{{ nda.signed_at|date:"Y/m/d" }}</td>
+          <td style="font-size:12px">{{ nda.expires_at|date:"Y/m/d" }}</td>
+          <td>
+            {% if nda.is_revoked %}<span class="cc-badge cc-badge-red">مُلغى</span>
+            {% elif nda.is_expired %}<span class="cc-badge cc-badge-gray">منتهي</span>
+            {% else %}<span class="cc-badge cc-badge-green">ساري</span>{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5"><div class="cc-empty"><i class="ti ti-file-text"></i><p>لا يوجد توقيعات NDA</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

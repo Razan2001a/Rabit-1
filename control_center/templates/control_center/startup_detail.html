@@ -1,0 +1,114 @@
+{% extends 'control_center/base.html' %}
+{% block title %}{{ startup.company_name }} — مركز التحكم{% endblock %}
+{% block page_title %}{{ startup.company_name|default:"شركة ناشئة" }}{% endblock %}
+{% block content %}
+
+<div class="cc-page-header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <a href="{% url 'control_center:startups_list' %}" class="cc-btn cc-btn-sm"><i class="ti ti-arrow-right"></i> رجوع</a>
+    <div class="cc-page-title">{{ startup.company_name|default:"شركة ناشئة" }}</div>
+    <span class="cc-badge {% if startup.status == 'listed' %}cc-badge-green{% elif startup.status == 'review' %}cc-badge-yellow{% elif startup.status == 'rejected' %}cc-badge-red{% else %}cc-badge-gray{% endif %}">
+      {{ startup.get_status_display }}
+    </span>
+  </div>
+</div>
+
+<div class="cc-grid-2">
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">بيانات الشركة</span></div>
+    <div class="cc-card-body">
+      <table class="cc-table">
+        <tr><td style="color:var(--cc-hint);width:140px">الاسم العربي</td><td>{{ startup.company_name|default:'—' }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">الاسم الإنجليزي</td><td>{{ startup.company_name_en|default:'—' }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">الوصف المختصر</td><td>{{ startup.tagline|default:'—' }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">القطاع</td><td>{{ startup.sector|default:'—' }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">المدينة</td><td>{{ startup.city|default:'—' }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">سنة التأسيس</td><td>{{ startup.founded_year|default:'—' }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">المرحلة</td><td><span class="cc-badge cc-badge-blue">{{ startup.get_stage_display }}</span></td></tr>
+        <tr><td style="color:var(--cc-hint)">حجم الفريق</td><td>{{ startup.team_size }}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">البيانات المالية</span></div>
+    <div class="cc-card-body">
+      <table class="cc-table">
+        <tr><td style="color:var(--cc-hint);width:160px">الإيراد الشهري</td><td>{% if startup.revenue_monthly %}{{ startup.revenue_monthly|floatformat:0 }} ريال{% else %}—{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">المبلغ المستهدف</td><td>{% if startup.funding_target %}{{ startup.funding_target|floatformat:0 }} ريال{% else %}—{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">نسبة الحصة</td><td>{% if startup.equity_offered %}{{ startup.equity_offered }}%{% else %}—{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">التقييم</td><td>{% if startup.valuation %}{{ startup.valuation|floatformat:0 }} ريال{% else %}—{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">النقاط</td><td><strong>{{ startup.scorecard }}</strong>/100</td></tr>
+        <tr><td style="color:var(--cc-hint)">اكتمال الملف</td><td>{{ startup.profile_completion }}%</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-head"><span class="cc-card-title">تغيير حالة الملف</span></div>
+  <div class="cc-card-body">
+    <form method="post" action="{% url 'control_center:startup_change_status' startup.pk %}" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      {% csrf_token %}
+      <select class="cc-select" name="status">
+        <option value="draft"    {% if startup.status == 'draft' %}selected{% endif %}>مسودة</option>
+        <option value="ready"    {% if startup.status == 'ready' %}selected{% endif %}>جاهز للمراجعة</option>
+        <option value="review"   {% if startup.status == 'review' %}selected{% endif %}>قيد المراجعة</option>
+        <option value="revision" {% if startup.status == 'revision' %}selected{% endif %}>يحتاج تعديل</option>
+        <option value="approved" {% if startup.status == 'approved' %}selected{% endif %}>معتمد</option>
+        <option value="listed"   {% if startup.status == 'listed' %}selected{% endif %}>مدرج</option>
+        <option value="rejected" {% if startup.status == 'rejected' %}selected{% endif %}>مرفوض</option>
+      </select>
+      <button type="submit" class="cc-btn cc-btn-primary"><i class="ti ti-check"></i> حفظ الحالة</button>
+      <a href="{% url 'control_center:scoring_edit' startup.pk %}" class="cc-btn cc-btn-success"><i class="ti ti-award"></i> تعديل النقاط</a>
+    </form>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-head"><span class="cc-card-title">تفصيل Scorecard</span></div>
+  <div class="cc-card-body">
+    <table class="cc-table">
+      <tr><td style="color:var(--cc-hint)">قوة الفريق</td><td><strong>{{ score.team_strength }}</strong>/10</td></tr>
+      <tr><td style="color:var(--cc-hint)">نموذج الأعمال</td><td><strong>{{ score.business_model }}</strong>/10</td></tr>
+      <tr><td style="color:var(--cc-hint)">حجم السوق</td><td><strong>{{ score.market_size }}</strong>/10</td></tr>
+      <tr><td style="color:var(--cc-hint)">الإيرادات</td><td><strong>{{ score.revenues }}</strong>/10</td></tr>
+      <tr><td style="color:var(--cc-hint)">الجاهزية القانونية</td><td><strong>{{ score.legal_readiness }}</strong>/10</td></tr>
+      <tr><td style="color:var(--cc-hint)">المنتج التقني</td><td><strong>{{ score.tech_product }}</strong>/10</td></tr>
+      <tr style="background:var(--cc-bg)"><td><strong>المجموع</strong></td><td><strong style="color:var(--cc-accent)">{{ score.total }}/100</strong></td></tr>
+    </table>
+    {% if score.admin_notes %}
+    <div style="margin-top:12px;padding:10px;background:var(--cc-bg);border-radius:7px;font-size:12px;color:var(--cc-muted)">
+      <strong>ملاحظات الإدارة:</strong> {{ score.admin_notes }}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if deals %}
+<div class="cc-card">
+  <div class="cc-card-head"><span class="cc-card-title">الصفقات المرتبطة</span></div>
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead><tr><th>#</th><th>المستثمر</th><th>المبلغ</th><th>الحصة</th><th>الحالة</th></tr></thead>
+    <tbody>
+      {% for deal in deals %}
+      <tr>
+        <td style="color:var(--cc-hint)">#{{ deal.pk }}</td>
+        <td>{{ deal.investor_request.investor.get_full_name|default:deal.investor_request.investor.username }}</td>
+        <td>{% if deal.final_amount %}{{ deal.final_amount|floatformat:0 }} ريال{% else %}—{% endif %}</td>
+        <td>{% if deal.final_equity_pct %}{{ deal.final_equity_pct }}%{% else %}—{% endif %}</td>
+        <td>
+          <span class="cc-badge {% if deal.status == 'closed' %}cc-badge-green{% elif deal.status == 'signed' %}cc-badge-blue{% elif deal.status == 'negotiation' %}cc-badge-yellow{% elif deal.status == 'cancelled' %}cc-badge-red{% else %}cc-badge-purple{% endif %}">
+            {{ deal.get_status_display }}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

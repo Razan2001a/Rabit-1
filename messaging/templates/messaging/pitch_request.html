@@ -1,0 +1,32 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}طلب جلسة Pitch{% endblock %}
+{% block content %}
+<section class="page-shell-narrow">
+  <div class="card">
+    <div class="card-head"><div class="ch-ico pu"><i class="ti ti-microphone"></i></div>
+      <div><div class="ch-t">طلب جلسة Pitch</div><div class="ch-s">مع {{ startup.company_name }}</div></div></div>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="fg">
+        <label class="fl">جدول الأعمال (Agenda)</label>
+        <textarea name="agenda" class="ft" rows="4" placeholder="ما هي النقاط اللي تبي تتناقش فيها؟" required></textarea>
+      </div>
+      <div class="fr">
+        <div>
+          <label class="fl">الموعد المُقترَح</label>
+          <input type="datetime-local" name="scheduled_at" class="fi" required>
+        </div>
+        <div>
+          <label class="fl">المدة (دقيقة)</label>
+          <input type="number" name="duration_min" class="fi" value="30" min="15" max="120">
+        </div>
+      </div>
+      <div class="form-actions-end gap10">
+        <a href="{% url 'matching:browse_startups' %}" class="btn btn-o">إلغاء</a>
+        <button type="submit" class="btn btn-p"><i class="ti ti-send"></i> أرسل طلب الجلسة</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

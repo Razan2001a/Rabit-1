@@ -1,0 +1,52 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}جلسات Pitch{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <div class="dp-header dp-header-block">
+    <h1>🎤 جلسات Pitch</h1>
+    <p class="txt-mu">جلسات العرض المباشر بين المستثمرين والشركات</p>
+  </div>
+
+  {% if sessions %}
+    <div class="pitch-list">
+    {% for s in sessions %}
+      <div class="card pitch-card">
+        <div class="pitch-card-head">
+          <div>
+            <strong>{{ s.startup.company_name }}</strong>
+            <div class="txt-mu">مع: {{ s.investor.get_full_name|default:s.investor.username }}</div>
+          </div>
+          <span class="pill
+            {% if s.status == 'scheduled' %}pill-info
+            {% elif s.status == 'done' %}pill-ok
+            {% elif s.status == 'cancelled' %}pill-er
+            {% else %}pill-wn{% endif %}">{{ s.get_status_display }}</span>
+        </div>
+        {% if s.scheduled_at %}<div class="pitch-time">⏰ {{ s.scheduled_at|date:'Y-m-d H:i' }} ({{ s.duration_min }} دقيقة)</div>{% endif %}
+        {% if s.agenda %}<p class="pitch-agenda">{{ s.agenda|linebreaksbr }}</p>{% endif %}
+        {% if s.meeting_link %}<a href="{{ s.meeting_link }}" target="_blank" class="btn btn-p btn-sm"><i class="ti ti-video"></i> ادخل الاجتماع</a>{% endif %}
+
+        {% if s.status == 'requested' and request.user == s.startup.user %}
+        <form method="post" action="{% url 'messaging:pitch_confirm' s.pk %}" class="pitch-confirm-form">
+          {% csrf_token %}
+          <input type="datetime-local" name="scheduled_at" class="fi" required>
+          <input type="url" name="meeting_link" class="fi" placeholder="رابط Google Meet / Zoom" required>
+          <button type="submit" class="btn btn-ok btn-sm"><i class="ti ti-calendar-check"></i> أكّد وحدّد</button>
+        </form>
+        {% endif %}
+
+        {% if s.status in 'requested scheduled' %}
+        <a href="{% url 'messaging:pitch_cancel' s.pk %}" class="btn btn-o btn-sm btn-danger">إلغاء</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-st lg">
+      <i class="ti ti-microphone-off"></i>
+      <div class="empty-st-t">لا توجد جلسات Pitch بعد</div>
+      <div class="empty-st-s">يقدر المستثمر يطلب جلسة Pitch من صفحة استكشاف الشركات.</div>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}تسجيل KPIs{% endblock %}
+{% block content %}
+<section class="page-shell-narrow">
+  <div class="card">
+    <div class="card-head"><div class="ch-ico ok"><i class="ti ti-chart-line"></i></div>
+      <div><div class="ch-t">Snapshot KPIs جديد</div></div></div>
+    <form method="post">
+      {% csrf_token %}
+      <div class="fr">
+        <div><label class="fl">MRR (الإيراد الشهري)</label><input type="number" step="0.01" name="mrr" class="fi"></div>
+        <div><label class="fl">ARR (الإيراد السنوي)</label><input type="number" step="0.01" name="arr" class="fi"></div>
+      </div>
+      <div class="fr">
+        <div><label class="fl">CAC</label><input type="number" step="0.01" name="cac" class="fi"></div>
+        <div><label class="fl">LTV</label><input type="number" step="0.01" name="ltv" class="fi"></div>
+      </div>
+      <div class="fg"><label class="fl">Churn %</label><input type="number" step="0.01" name="churn_pct" class="fi"></div>
+      <div class="fg"><label class="fl">ملاحظات</label><textarea name="notes" class="ft" rows="3"></textarea></div>
+      <div class="form-actions-end gap10">
+        <a href="{% url 'post_investment:ir_dashboard' %}" class="btn btn-o">إلغاء</a>
+        <button type="submit" class="btn btn-p"><i class="ti ti-device-floppy"></i> حفظ Snapshot</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

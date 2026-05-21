@@ -1,0 +1,70 @@
+{% extends 'control_center/base.html' %}
+{% block title %}المستثمرون — مركز التحكم{% endblock %}
+{% block page_title %}المستثمرون{% endblock %}
+{% block content %}
+
+<div class="cc-page-header">
+  <div class="cc-page-title">المستثمرون ({{ investors|length }})</div>
+  <form method="get" class="cc-filter-bar">
+    <input class="cc-input cc-input-search" name="q" placeholder="بحث..." value="{{ search_query }}"/>
+    <select class="cc-select" name="type" onchange="this.form.submit()">
+      <option value="">كل الأنواع</option>
+      {% for val, label in type_choices %}
+      <option value="{{ val }}" {% if type_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <select class="cc-select" name="kyc" onchange="this.form.submit()">
+      <option value="">حالة KYC</option>
+      <option value="verified"   {% if kyc_filter == 'verified' %}selected{% endif %}>موثق</option>
+      <option value="pending"    {% if kyc_filter == 'pending' %}selected{% endif %}>انتظار</option>
+      <option value="incomplete" {% if kyc_filter == 'incomplete' %}selected{% endif %}>غير مكتمل</option>
+    </select>
+    <button type="submit" class="cc-btn cc-btn-primary"><i class="ti ti-search"></i></button>
+  </form>
+</div>
+
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead>
+      <tr><th>المستثمر</th><th>النوع</th><th>القطاعات</th><th>الاستثمارات</th><th>KYC</th><th>الإجراءات</th></tr>
+    </thead>
+    <tbody>
+      {% for inv in investors %}
+      <tr>
+        <td>
+          <div class="cc-user-row">
+            <div class="cc-avatar" style="background:#f0fdf4;color:#15803d">{{ inv.user.first_name|first|upper|default:inv.user.username|first|upper }}</div>
+            <div>
+              <div class="cc-user-name">{{ inv.company_name|default:inv.user.get_full_name }}</div>
+              <div class="cc-user-email">{{ inv.user.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td style="font-size:12px">{{ inv.get_investor_type_display }}</td>
+        <td style="font-size:12px;color:var(--cc-muted)">{{ inv.sectors_interest|default:'—'|truncatechars:30 }}</td>
+        <td style="text-align:center"><strong>{{ inv.portfolio_count }}</strong></td>
+        <td>
+          {% if inv.kyc_verified %}
+            <span class="cc-badge cc-badge-green">✓ موثق</span>
+          {% elif inv.kyc_submitted %}
+            <span class="cc-badge cc-badge-yellow">انتظار</span>
+          {% else %}
+            <span class="cc-badge cc-badge-gray">ناقص</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if inv.kyc_submitted and not inv.kyc_verified %}
+          <a href="{% url 'control_center:kyc_list' %}" class="cc-btn cc-btn-sm cc-btn-success">راجع KYC</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6"><div class="cc-empty"><i class="ti ti-coins"></i><p>لا يوجد مستثمرون</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

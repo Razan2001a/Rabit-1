@@ -1,0 +1,81 @@
+{% extends 'control_center/base.html' %}
+{% block title %}صفقة #{{ deal.pk }} — مركز التحكم{% endblock %}
+{% block page_title %}صفقة #{{ deal.pk }}{% endblock %}
+{% block content %}
+
+<div class="cc-page-header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <a href="{% url 'control_center:deals_list' %}" class="cc-btn cc-btn-sm"><i class="ti ti-arrow-right"></i> رجوع</a>
+    <div class="cc-page-title">صفقة #{{ deal.pk }}</div>
+    <span class="cc-badge {% if deal.status == 'closed' %}cc-badge-green{% elif deal.status == 'signed' %}cc-badge-blue{% elif deal.status == 'negotiation' %}cc-badge-yellow{% elif deal.status == 'agreed' %}cc-badge-purple{% else %}cc-badge-red{% endif %}">
+      {{ deal.get_status_display }}
+    </span>
+  </div>
+</div>
+
+<div class="cc-grid-2">
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">تفاصيل الصفقة</span></div>
+    <div class="cc-card-body">
+      <table class="cc-table">
+        <tr><td style="color:var(--cc-hint)">الشركة</td><td><strong>{{ deal.investor_request.startup.company_name }}</strong></td></tr>
+        <tr><td style="color:var(--cc-hint)">المستثمر</td><td>{{ deal.investor_request.investor.get_full_name|default:deal.investor_request.investor.username }}</td></tr>
+        <tr><td style="color:var(--cc-hint)">المبلغ</td><td>{% if deal.final_amount %}{{ deal.final_amount|floatformat:0 }} ريال{% else %}—{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">الحصة</td><td>{% if deal.final_equity_pct %}{{ deal.final_equity_pct }}%{% else %}—{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">عمولة المنصة</td><td>{{ deal.commission_pct }}% — {{ deal.commission_amount|floatformat:0 }} ريال</td></tr>
+        <tr><td style="color:var(--cc-hint)">موافقة المستثمر</td><td>{% if deal.investor_agreed %}<span class="cc-badge cc-badge-green">✓</span>{% else %}<span class="cc-badge cc-badge-gray">لا</span>{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">موافقة الشركة</td><td>{% if deal.startup_agreed %}<span class="cc-badge cc-badge-green">✓</span>{% else %}<span class="cc-badge cc-badge-gray">لا</span>{% endif %}</td></tr>
+        <tr><td style="color:var(--cc-hint)">تاريخ الإنشاء</td><td>{{ deal.created_at|date:"Y/m/d" }}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">Term Sheets</span></div>
+    {% if term_sheets %}
+    <div class="cc-table-wrap">
+    <table class="cc-table">
+      <thead><tr><th>#</th><th>مُقترح من</th><th>المبلغ</th><th>الحصة</th><th>الحالة</th></tr></thead>
+      <tbody>
+        {% for ts in term_sheets %}
+        <tr>
+          <td style="color:var(--cc-hint)">#{{ ts.pk }}</td>
+          <td>{{ ts.proposed_by.get_full_name|default:ts.proposed_by.username }}</td>
+          <td>{{ ts.amount|floatformat:0 }} ريال</td>
+          <td>{{ ts.equity_pct }}%</td>
+          <td>
+            <span class="cc-badge {% if ts.status == 'accepted' %}cc-badge-green{% elif ts.status == 'rejected' %}cc-badge-red{% else %}cc-badge-yellow{% endif %}">
+              {{ ts.get_status_display }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    {% else %}
+    <div class="cc-empty"><i class="ti ti-file-text"></i><p>لا يوجد term sheets</p></div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-head"><span class="cc-card-title">رسائل غرفة التفاوض</span></div>
+  {% if messages %}
+  <div class="cc-card-body">
+    {% for msg in messages %}
+    <div style="padding:10px 12px;background:var(--cc-bg);border-radius:8px;margin-bottom:8px;border:1px solid var(--cc-border)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+        <strong style="font-size:12px">{{ msg.sender.get_full_name|default:msg.sender.username }}</strong>
+        <span style="font-size:11px;color:var(--cc-hint)">{{ msg.created_at|date:"Y/m/d H:i" }}</span>
+      </div>
+      <p style="font-size:13px;color:var(--cc-muted)">{{ msg.content }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="cc-empty"><i class="ti ti-message-dots"></i><p>لا يوجد رسائل</p></div>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}علاقات المستثمرين (IR){% endblock %}
+{% block content %}
+<section class="page-shell">
+  <div class="dp-header dp-header-block">
+    <h1>📈 لوحة علاقات المستثمرين</h1>
+    <p class="txt-mu">إدارة التواصل المستمر مع مستثمري {{ profile.company_name }}</p>
+  </div>
+
+  <div class="g4 g4-mb">
+    <div class="kpi kpi-p"><div class="kpi-v">{{ investors_count }}</div><div class="kpi-l">عدد المستثمرين</div></div>
+    <div class="kpi kpi-ok"><div class="kpi-v">{{ total_raised|floatformat:0 }}</div><div class="kpi-l">إجمالي التمويل (ريال)</div></div>
+    <div class="kpi kpi-pu"><div class="kpi-v">{{ reports.count }}</div><div class="kpi-l">تقارير مُرسَلة</div></div>
+    <div class="kpi kpi-wn"><div class="kpi-v">{{ meetings.count }}</div><div class="kpi-l">اجتماعات مجدولة</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-head">
+        <div class="ch-ico"><i class="ti ti-report"></i></div>
+        <div><div class="ch-t">التقارير الدورية</div></div>
+        <a href="{% url 'post_investment:report_create' %}" class="btn btn-p btn-sm ch-spacer"><i class="ti ti-plus"></i> تقرير جديد</a>
+      </div>
+      {% for r in reports|slice:":5" %}
+        <a href="{% url 'post_investment:report_detail' r.pk %}" class="row-item">
+          <div class="row-ico ri-p"><i class="ti ti-file-text"></i></div>
+          <div class="row-body">
+            <div class="row-lbl">{{ r.title }}</div>
+            <div class="row-sub">{{ r.get_period_display }} • {{ r.sent_at|date:'Y-m-d' }}</div>
+          </div>
+        </a>
+      {% empty %}
+        <div class="empty-st"><div class="empty-st-s">لم تُرسل تقارير بعد.</div></div>
+      {% endfor %}
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="ch-ico pu"><i class="ti ti-users"></i></div>
+        <div><div class="ch-t">اجتماعات مجلس الإدارة</div></div>
+        <a href="{% url 'post_investment:meeting_create' %}" class="btn btn-p btn-sm ch-spacer"><i class="ti ti-plus"></i> اجتماع جديد</a>
+      </div>
+      {% for m in meetings|slice:":5" %}
+        <div class="row-item">
+          <div class="row-ico ri-p"><i class="ti ti-calendar"></i></div>
+          <div class="row-body">
+            <div class="row-lbl">{{ m.title }}</div>
+            <div class="row-sub">{{ m.scheduled_at|date:'Y-m-d H:i' }} — {{ m.location|default:'—' }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="empty-st"><div class="empty-st-s">لا اجتماعات مجدولة.</div></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="ch-ico ok"><i class="ti ti-chart-line"></i></div>
+      <div><div class="ch-t">مؤشرات الأداء (KPIs)</div></div>
+      <a href="{% url 'post_investment:kpi_add' %}" class="btn btn-p btn-sm ch-spacer"><i class="ti ti-plus"></i> Snapshot جديد</a>
+    </div>
+    {% if kpis %}
+      <table class="dr-table">
+        <thead><tr><th>التاريخ</th><th>MRR</th><th>ARR</th><th>CAC</th><th>LTV</th><th>Churn %</th></tr></thead>
+        <tbody>
+        {% for k in kpis %}
+          <tr>
+            <td>{{ k.snapshot_date|date:'Y-m-d' }}</td>
+            <td>{{ k.mrr|default:'—' }}</td>
+            <td>{{ k.arr|default:'—' }}</td>
+            <td>{{ k.cac|default:'—' }}</td>
+            <td>{{ k.ltv|default:'—' }}</td>
+            <td>{{ k.churn_pct|default:'—' }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty-st"><div class="empty-st-s">لم تُسجَّل KPIs بعد.</div></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

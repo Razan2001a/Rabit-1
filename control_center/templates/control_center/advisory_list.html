@@ -1,0 +1,46 @@
+{% extends 'control_center/base.html' %}
+{% block title %}طلبات الاستشارة — مركز التحكم{% endblock %}
+{% block page_title %}طلبات الاستشارة{% endblock %}
+{% block content %}
+
+<div class="cc-page-header">
+  <div class="cc-page-title">طلبات الاستشارة ({{ requests|length }})</div>
+  <form method="get" class="cc-filter-bar">
+    <select class="cc-select" name="status" onchange="this.form.submit()">
+      <option value="">كل الحالات</option>
+      {% for val, label in status_choices %}
+      <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead>
+      <tr><th>الشركة</th><th>المستشار</th><th>الخدمة</th><th>التخصص</th><th>الحالة</th><th>التاريخ</th></tr>
+    </thead>
+    <tbody>
+      {% for req in requests %}
+      <tr>
+        <td style="font-weight:600">{{ req.startup.company_name|default:'—' }}</td>
+        <td>{{ req.advisor.user.get_full_name|default:req.advisor.user.username }}</td>
+        <td style="font-size:12px;color:var(--cc-muted)">{{ req.service_name }}</td>
+        <td><span class="cc-badge cc-badge-purple">{{ req.advisor.get_specialty_display }}</span></td>
+        <td>
+          <span class="cc-badge {% if req.status == 'completed' %}cc-badge-green{% elif req.status == 'in_progress' %}cc-badge-blue{% elif req.status == 'pending' %}cc-badge-yellow{% elif req.status == 'accepted' %}cc-badge-purple{% else %}cc-badge-red{% endif %}">
+            {{ req.get_status_display }}
+          </span>
+        </td>
+        <td style="font-size:12px;color:var(--cc-hint)">{{ req.created_at|date:"Y/m/d" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6"><div class="cc-empty"><i class="ti ti-message-dots"></i><p>لا يوجد طلبات</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

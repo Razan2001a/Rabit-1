@@ -1,0 +1,39 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}تقرير دوري جديد{% endblock %}
+{% block content %}
+<section class="page-shell-narrow">
+  <div class="card">
+    <div class="card-head"><div class="ch-ico info"><i class="ti ti-report"></i></div>
+      <div><div class="ch-t">تقرير دوري للمستثمرين</div></div></div>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="fr">
+        <div><label class="fl">العنوان</label><input type="text" name="title" class="fi" required></div>
+        <div><label class="fl">الفترة</label>
+          <select name="period" class="fs">
+            <option value="monthly">شهري</option>
+            <option value="quarterly" selected>ربعي</option>
+            <option value="yearly">سنوي</option>
+          </select></div>
+      </div>
+      <div class="fg"><label class="fl">الملخص التنفيذي</label><textarea name="summary" class="ft" rows="3" required></textarea></div>
+      <div class="fr">
+        <div><label class="fl">الإيرادات</label><input type="number" step="0.01" name="revenue" class="fi"></div>
+        <div><label class="fl">Burn Rate</label><input type="number" step="0.01" name="burn_rate" class="fi"></div>
+      </div>
+      <div class="fr">
+        <div><label class="fl">Runway (شهور)</label><input type="number" name="runway_months" class="fi" min="0"></div>
+        <div><label class="fl">عدد العملاء</label><input type="number" name="customers_count" class="fi" min="0"></div>
+      </div>
+      <div class="fg"><label class="fl">حجم الفريق</label><input type="number" name="team_size" class="fi" min="0"></div>
+      <div class="fg"><label class="fl">الإنجازات</label><textarea name="achievements" class="ft" rows="3"></textarea></div>
+      <div class="fg"><label class="fl">التحديات</label><textarea name="challenges" class="ft" rows="3"></textarea></div>
+      <div class="fg"><label class="fl">ملف PDF (اختياري)</label><input type="file" name="file" accept=".pdf" class="fi"></div>
+      <div class="form-actions-end gap10">
+        <a href="{% url 'post_investment:ir_dashboard' %}" class="btn btn-o">إلغاء</a>
+        <button type="submit" class="btn btn-p"><i class="ti ti-send"></i> نشر التقرير وإشعار المستثمرين</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

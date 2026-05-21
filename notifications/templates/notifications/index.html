@@ -1,0 +1,45 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}الإشعارات{% endblock %}
+
+{% block content %}
+<section class="page-shell">
+  <div class="dp-header">
+    <h1>الإشعارات</h1>
+    {% if notifications %}
+      <a href="{% url 'notifications:mark_all_read' %}" class="btn btn-o btn-sm">
+        <i class="ti ti-checks"></i> تعليم الكل كمقروء
+      </a>
+    {% endif %}
+  </div>
+
+  {% if notifications %}
+    <div class="notif-list">
+    {% for n in notifications %}
+      <a href="{% url 'notifications:mark_read' n.pk %}" class="notif-item {% if not n.is_read %}notif-unread{% endif %}">
+        <div class="notif-ico notif-ico-{{ n.kind }}">
+          {% if n.kind == 'request' %}<i class="ti ti-inbox"></i>
+          {% elif n.kind == 'message' %}<i class="ti ti-message-circle"></i>
+          {% elif n.kind == 'approval' %}<i class="ti ti-circle-check"></i>
+          {% elif n.kind == 'rejection' %}<i class="ti ti-circle-x"></i>
+          {% elif n.kind == 'payment' %}<i class="ti ti-credit-card"></i>
+          {% elif n.kind == 'deal' %}<i class="ti ti-file-invoice"></i>
+          {% else %}<i class="ti ti-bell"></i>{% endif %}
+        </div>
+        <div class="notif-body">
+          <div class="notif-title">{{ n.title }}</div>
+          {% if n.body %}<div class="notif-text">{{ n.body }}</div>{% endif %}
+          <div class="notif-time">{{ n.created_at|date:'Y-m-d H:i' }}</div>
+        </div>
+        {% if not n.is_read %}<span class="notif-dot"></span>{% endif %}
+      </a>
+    {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-st lg">
+      <i class="ti ti-bell-off"></i>
+      <div class="empty-st-t">لا توجد إشعارات</div>
+      <div class="empty-st-s">سنشعرك عند وصول طلبات أو رسائل جديدة.</div>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

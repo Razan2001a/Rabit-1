@@ -1,0 +1,135 @@
+{% extends 'control_center/base.html' %}
+{% block title %}نظرة عامة — مركز التحكم{% endblock %}
+{% block page_title %}نظرة عامة{% endblock %}
+{% block content %}
+
+<div class="cc-stats">
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-users"></i> إجمالي المستخدمين</div>
+    <div class="cc-stat-val">{{ total_users }}</div>
+    <div class="cc-stat-sub">كل الأدوار</div>
+  </div>
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-rocket"></i> الشركات الناشئة</div>
+    <div class="cc-stat-val">{{ total_startups }}</div>
+    <div class="cc-stat-sub">{{ listed_startups }} مدرجة</div>
+  </div>
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-handshake"></i> الصفقات النشطة</div>
+    <div class="cc-stat-val">{{ active_deals }}</div>
+    <div class="cc-stat-sub">قيد التفاوض والاتفاق</div>
+  </div>
+  <div class="cc-stat">
+    <div class="cc-stat-label"><i class="ti ti-credit-card"></i> إيرادات المنصة</div>
+    <div class="cc-stat-val">{{ total_revenue|floatformat:0 }}</div>
+    <div class="cc-stat-sub">ريال سعودي</div>
+  </div>
+</div>
+
+{% if pending_kyc or pending_start or pending_dl %}
+<div class="cc-alert cc-alert-warn">
+  <i class="ti ti-alert-triangle"></i>
+  يوجد
+  {% if pending_kyc %}{{ pending_kyc }} طلب KYC{% endif %}
+  {% if pending_start %}{% if pending_kyc %} · {% endif %}{{ pending_start }} ملف شركة{% endif %}
+  {% if pending_dl %}{% if pending_kyc or pending_start %} · {% endif %}{{ pending_dl }} طلب تحميل{% endif %}
+  — تنتظر المراجعة.
+</div>
+{% endif %}
+
+<div class="cc-grid-2">
+  <div class="cc-card">
+    <div class="cc-card-head">
+      <span class="cc-card-title">الشركات تنتظر المراجعة</span>
+      <a href="{% url 'control_center:startups_list' %}?status=review" class="cc-btn cc-btn-sm">عرض الكل</a>
+    </div>
+    {% if recent_startups %}
+    <div class="cc-table-wrap">
+    <table class="cc-table">
+      <thead><tr><th>الشركة</th><th>المرحلة</th><th>الحالة</th><th></th></tr></thead>
+      <tbody>
+        {% for s in recent_startups %}
+        <tr>
+          <td>
+            <div class="cc-user-row">
+              <div class="cc-avatar">{{ s.company_name|first }}</div>
+              <div>
+                <div class="cc-user-name">{{ s.company_name|default:s.user.username }}</div>
+                <div class="cc-user-email">{{ s.sector }}</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="cc-badge cc-badge-blue">{{ s.get_stage_display }}</span></td>
+          <td><span class="cc-badge cc-badge-yellow">{{ s.get_status_display }}</span></td>
+          <td><a href="{% url 'control_center:startup_detail' s.pk %}" class="cc-btn cc-btn-sm cc-btn-success">مراجعة</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    {% else %}
+    <div class="cc-empty"><i class="ti ti-circle-check"></i><p>لا يوجد ملفات معلقة</p></div>
+    {% endif %}
+  </div>
+
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">آخر النشاطات</span></div>
+    <div class="cc-card-body" style="padding:8px 16px">
+      <ul class="cc-activity">
+        {% for notif in recent_activity %}
+        <li>
+          <div class="cc-act-dot" style="background:{% if notif.kind == 'approval' %}#16a34a{% elif notif.kind == 'rejection' %}#b91c1c{% elif notif.kind == 'deal' %}#1e40af{% else %}#d97706{% endif %}"></div>
+          <div class="cc-act-text"><strong>{{ notif.user.get_full_name|default:notif.user.username }}</strong> — {{ notif.title }}</div>
+          <div class="cc-act-time">{{ notif.created_at|timesince }}</div>
+        </li>
+        {% empty %}
+        <li style="justify-content:center;color:var(--cc-hint)">لا يوجد نشاط حديث</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="cc-grid-2">
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">توزيع الشركات حسب الحالة</span></div>
+    <div class="cc-card-body">
+      {% for label, count in startup_status_counts.items %}
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+          <span style="color:var(--cc-muted)">{{ label }}</span>
+          <strong>{{ count }}</strong>
+        </div>
+        <div class="cc-progress">
+          <div class="cc-progress-fill" style="width:{% if total_startups > 0 %}{% widthratio count total_startups 100 %}{% else %}0{% endif %}%;background:{% if label == 'مدرجة' %}#1e40af{% elif label == 'معتمدة' %}#15803d{% elif label == 'قيد المراجعة' %}#b45309{% elif label == 'مرفوضة' %}#b91c1c{% else %}#94a3b8{% endif %}"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="cc-card">
+    <div class="cc-card-head"><span class="cc-card-title">إجراءات سريعة</span></div>
+    <div class="cc-card-body">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <a href="{% url 'control_center:kyc_list' %}" class="cc-btn" style="justify-content:flex-start">
+          <i class="ti ti-id"></i> مراجعة KYC
+          {% if pending_kyc %}<span class="cc-nav-badge">{{ pending_kyc }}</span>{% endif %}
+        </a>
+        <a href="{% url 'control_center:startups_list' %}?status=review" class="cc-btn" style="justify-content:flex-start">
+          <i class="ti ti-rocket"></i> مراجعة ملفات الشركات
+          {% if pending_start %}<span class="cc-nav-badge">{{ pending_start }}</span>{% endif %}
+        </a>
+        <a href="{% url 'control_center:dataroom_list' %}" class="cc-btn" style="justify-content:flex-start">
+          <i class="ti ti-download"></i> طلبات التحميل
+          {% if pending_dl %}<span class="cc-nav-badge">{{ pending_dl }}</span>{% endif %}
+        </a>
+        <a href="{% url 'control_center:notifications_list' %}" class="cc-btn" style="justify-content:flex-start">
+          <i class="ti ti-send"></i> إرسال إشعار جماعي
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

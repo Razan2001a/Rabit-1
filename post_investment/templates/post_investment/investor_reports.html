@@ -1,0 +1,32 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}تقارير محفظتي{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <div class="dp-header dp-header-block">
+    <h1>📊 تقارير شركات محفظتي</h1>
+    <p class="txt-mu">آخر التقارير الدورية من الشركات اللي استثمرت فيها</p>
+  </div>
+  {% if reports %}
+    <div class="deal-list">
+    {% for r in reports %}
+      <a href="{% url 'post_investment:report_detail' r.pk %}" class="deal-card-link">
+        <div class="deal-card-row">
+          <div>
+            <strong>{{ r.title }}</strong>
+            <div class="deal-meta">{{ r.startup.company_name }} — {{ r.get_period_display }}</div>
+            <div class="deal-meta">{{ r.sent_at|date:'Y-m-d' }}</div>
+          </div>
+          <span class="pill pill-info">عرض التقرير</span>
+        </div>
+      </a>
+    {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-st lg">
+      <i class="ti ti-report-off"></i>
+      <div class="empty-st-t">لا توجد تقارير بعد</div>
+      <div class="empty-st-s">ستظهر هنا تقارير الشركات اللي استثمرت فيها.</div>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

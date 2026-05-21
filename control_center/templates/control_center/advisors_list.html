@@ -1,0 +1,69 @@
+{% extends 'control_center/base.html' %}
+{% block title %}المستشارون — مركز التحكم{% endblock %}
+{% block page_title %}المستشارون{% endblock %}
+{% block content %}
+
+<div class="cc-page-header">
+  <div class="cc-page-title">المستشارون ({{ advisors|length }})</div>
+  <form method="get" class="cc-filter-bar">
+    <input class="cc-input cc-input-search" name="q" placeholder="بحث..." value="{{ search_query }}"/>
+    <select class="cc-select" name="specialty" onchange="this.form.submit()">
+      <option value="">كل التخصصات</option>
+      {% for val, label in specialty_choices %}
+      <option value="{{ val }}" {% if specialty_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <select class="cc-select" name="available" onchange="this.form.submit()">
+      <option value="">كل الحالات</option>
+      <option value="yes" {% if avail_filter == 'yes' %}selected{% endif %}>متاح</option>
+      <option value="no"  {% if avail_filter == 'no' %}selected{% endif %}>غير متاح</option>
+    </select>
+    <button type="submit" class="cc-btn cc-btn-primary"><i class="ti ti-search"></i></button>
+  </form>
+</div>
+
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead>
+      <tr><th>المستشار</th><th>التخصص</th><th>السعر/ساعة</th><th>التقييم</th><th>الخدمات</th><th>الحالة</th><th>الإجراءات</th></tr>
+    </thead>
+    <tbody>
+      {% for adv in advisors %}
+      <tr>
+        <td>
+          <div class="cc-user-row">
+            <div class="cc-avatar" style="background:#f5f3ff;color:#6d28d9">{{ adv.user.first_name|first|upper|default:adv.user.username|first|upper }}</div>
+            <div>
+              <div class="cc-user-name">{{ adv.user.get_full_name|default:adv.user.username }}</div>
+              <div class="cc-user-email">{{ adv.user.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="cc-badge cc-badge-purple">{{ adv.get_specialty_display }}</span></td>
+        <td>{% if adv.hourly_rate %}{{ adv.hourly_rate|floatformat:0 }} ريال{% else %}—{% endif %}</td>
+        <td>{{ adv.rating }} ⭐</td>
+        <td style="text-align:center"><strong>{{ adv.services_count }}</strong></td>
+        <td>
+          {% if adv.is_available %}
+            <span class="cc-badge cc-badge-green">متاح</span>
+          {% else %}
+            <span class="cc-badge cc-badge-gray">غير متاح</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'control_center:advisor_toggle' adv.pk %}"
+             class="cc-btn cc-btn-sm {% if adv.is_available %}cc-btn-warn{% else %}cc-btn-success{% endif %}">
+            {% if adv.is_available %}إيقاف{% else %}تفعيل{% endif %}
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7"><div class="cc-empty"><i class="ti ti-school"></i><p>لا يوجد مستشارون</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

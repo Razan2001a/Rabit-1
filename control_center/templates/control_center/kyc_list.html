@@ -1,0 +1,111 @@
+{% extends 'control_center/base.html' %}
+{% block title %}مراجعة KYC — مركز التحكم{% endblock %}
+{% block page_title %}مراجعة KYC{% endblock %}
+{% block content %}
+
+{% if pending_investors %}
+<div class="cc-alert cc-alert-warn">
+  <i class="ti ti-alert-triangle"></i>
+  يوجد <strong>{{ pending_investors|length }}</strong> طلب KYC ينتظر المراجعة.
+</div>
+{% endif %}
+
+<div class="cc-page-header">
+  <div class="cc-page-title">طلبات KYC المعلقة ({{ pending_investors|length }})</div>
+</div>
+
+{% if pending_investors %}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+  {% for inv in pending_investors %}
+  <div class="cc-card">
+    <div class="cc-card-head">
+      <div class="cc-user-row">
+        <div class="cc-avatar" style="background:#f0fdf4;color:#15803d;width:36px;height:36px">
+          {{ inv.user.first_name|first|upper|default:inv.user.username|first|upper }}
+        </div>
+        <div>
+          <div class="cc-user-name">{{ inv.company_name|default:inv.user.get_full_name }}</div>
+          <div class="cc-user-email">{{ inv.get_investor_type_display }} · {{ inv.user.email }}</div>
+        </div>
+      </div>
+      <span class="cc-badge cc-badge-yellow">انتظار المراجعة</span>
+    </div>
+    <div class="cc-card-body">
+      {% if inv.kyc_national_id %}
+      <div class="cc-kyc-doc">
+        <div class="cc-kyc-icon"><i class="ti ti-id"></i></div>
+        <div class="cc-kyc-info">
+          <div class="cc-kyc-name">الهوية الوطنية</div>
+          <div class="cc-kyc-meta">{{ inv.kyc_national_id.name }}</div>
+        </div>
+        <a href="{{ inv.kyc_national_id.url }}" target="_blank" class="cc-btn cc-btn-sm"><i class="ti ti-eye"></i> عرض</a>
+      </div>
+      {% endif %}
+      {% if inv.kyc_investment_proof %}
+      <div class="cc-kyc-doc">
+        <div class="cc-kyc-icon"><i class="ti ti-file-text"></i></div>
+        <div class="cc-kyc-info">
+          <div class="cc-kyc-name">إثبات نشاط استثماري</div>
+          <div class="cc-kyc-meta">{{ inv.kyc_investment_proof.name }}</div>
+        </div>
+        <a href="{{ inv.kyc_investment_proof.url }}" target="_blank" class="cc-btn cc-btn-sm"><i class="ti ti-eye"></i> عرض</a>
+      </div>
+      {% endif %}
+      {% if inv.kyc_source_of_funds %}
+      <div class="cc-kyc-doc">
+        <div class="cc-kyc-icon"><i class="ti ti-coins"></i></div>
+        <div class="cc-kyc-info">
+          <div class="cc-kyc-name">مصدر الأموال</div>
+          <div class="cc-kyc-meta">{{ inv.kyc_source_of_funds.name }}</div>
+        </div>
+        <a href="{{ inv.kyc_source_of_funds.url }}" target="_blank" class="cc-btn cc-btn-sm"><i class="ti ti-eye"></i> عرض</a>
+      </div>
+      {% endif %}
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <a href="{% url 'control_center:kyc_approve' inv.pk %}" class="cc-btn cc-btn-success" style="flex:1;justify-content:center">
+          <i class="ti ti-check"></i> اعتماد KYC
+        </a>
+        <a href="{% url 'control_center:kyc_reject' inv.pk %}" class="cc-btn cc-btn-danger" style="flex:1;justify-content:center"
+           onclick="return confirm('هل أنت متأكد من رفض طلب KYC؟')">
+          <i class="ti ti-x"></i> رفض
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="cc-card">
+  <div class="cc-empty"><i class="ti ti-circle-check"></i><p>لا يوجد طلبات KYC معلقة</p></div>
+</div>
+{% endif %}
+
+<div class="cc-page-header" style="margin-top:10px">
+  <div class="cc-page-title">المستثمرون الموثقون</div>
+</div>
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead><tr><th>المستثمر</th><th>النوع</th><th>البريد</th><th>حالة KYC</th></tr></thead>
+    <tbody>
+      {% for inv in verified_investors %}
+      <tr>
+        <td>
+          <div class="cc-user-row">
+            <div class="cc-avatar" style="background:#f0fdf4;color:#15803d">{{ inv.user.first_name|first|upper|default:inv.user.username|first|upper }}</div>
+            <span class="cc-user-name">{{ inv.company_name|default:inv.user.get_full_name }}</span>
+          </div>
+        </td>
+        <td>{{ inv.get_investor_type_display }}</td>
+        <td style="color:var(--cc-hint)">{{ inv.user.email }}</td>
+        <td><span class="cc-badge cc-badge-green">✓ موثق</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" style="text-align:center;padding:20px;color:var(--cc-hint)">لا يوجد</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

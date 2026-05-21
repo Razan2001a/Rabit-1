@@ -1,0 +1,75 @@
+{% extends 'control_center/base.html' %}
+{% block title %}الشركات الناشئة — مركز التحكم{% endblock %}
+{% block page_title %}الشركات الناشئة{% endblock %}
+{% block content %}
+
+<div class="cc-page-header">
+  <div class="cc-page-title">الشركات الناشئة ({{ startups|length }})</div>
+  <form method="get" class="cc-filter-bar">
+    <input class="cc-input cc-input-search" name="q" placeholder="بحث..." value="{{ search_query }}"/>
+    <select class="cc-select" name="status" onchange="this.form.submit()">
+      <option value="">كل الحالات</option>
+      {% for val, label in status_choices %}
+      <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <select class="cc-select" name="stage" onchange="this.form.submit()">
+      <option value="">كل المراحل</option>
+      {% for val, label in stage_choices %}
+      <option value="{{ val }}" {% if stage_filter == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="cc-btn cc-btn-primary"><i class="ti ti-search"></i></button>
+  </form>
+</div>
+
+<div class="cc-card">
+  <div class="cc-table-wrap">
+  <table class="cc-table">
+    <thead>
+      <tr><th>الشركة</th><th>القطاع</th><th>المرحلة</th><th>النقاط</th><th>اكتمال الملف</th><th>الحالة</th><th>الإجراءات</th></tr>
+    </thead>
+    <tbody>
+      {% for s in startups %}
+      <tr>
+        <td>
+          <div class="cc-user-row">
+            <div class="cc-avatar" style="background:#eff6ff;color:#1e40af">{{ s.company_name|first|default:'؟' }}</div>
+            <div>
+              <div class="cc-user-name">{{ s.company_name|default:'—' }}</div>
+              <div class="cc-user-email">{{ s.user.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td style="color:var(--cc-muted)">{{ s.sector|default:'—' }}</td>
+        <td><span class="cc-badge cc-badge-blue">{{ s.get_stage_display }}</span></td>
+        <td><strong>{{ s.scorecard }}</strong><span style="color:var(--cc-hint)">/100</span></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:7px;min-width:90px">
+            <div class="cc-progress" style="flex:1">
+              <div class="cc-progress-fill" style="width:{{ s.profile_completion }}%;background:{% if s.profile_completion >= 80 %}#15803d{% elif s.profile_completion >= 50 %}#b45309{% else %}#b91c1c{% endif %}"></div>
+            </div>
+            <span style="font-size:11px;color:var(--cc-hint)">{{ s.profile_completion }}%</span>
+          </div>
+        </td>
+        <td>
+          <span class="cc-badge {% if s.status == 'listed' %}cc-badge-green{% elif s.status == 'approved' %}cc-badge-blue{% elif s.status == 'review' %}cc-badge-yellow{% elif s.status == 'rejected' or s.status == 'revision' %}cc-badge-red{% else %}cc-badge-gray{% endif %}">
+            {{ s.get_status_display }}
+          </span>
+        </td>
+        <td>
+          <div class="cc-action-bar">
+            <a href="{% url 'control_center:startup_detail' s.pk %}" class="cc-btn cc-btn-sm">تفاصيل</a>
+            <a href="{% url 'control_center:scoring_edit' s.pk %}" class="cc-btn cc-btn-sm cc-btn-success">نقاط</a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7"><div class="cc-empty"><i class="ti ti-rocket"></i><p>لا يوجد شركات</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

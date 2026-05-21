@@ -1,0 +1,109 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+{% block title %}Scorecard — {{ startup.sector }}{% endblock %}
+{# sidebar_nav — inherited from dashboard_base.html (role-aware) #}
+{% block content %}
+<section class="page-shell">
+
+  {# Header #}
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="width:56px;height:56px;background:linear-gradient(135deg,var(--pg),var(--pug));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:var(--p);flex-shrink:0">
+        {% if has_nda %}{{ startup.company_name|first|upper }}{% else %}🔒{% endif %}
+      </div>
+      <div style="flex:1">
+        <div style="font-size:1rem;font-weight:900;color:var(--dk)">
+          {% if has_nda %}{{ startup.company_name }}{% else %}شركة مخفية — {{ startup.sector }}{% endif %}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+          <span class="bdg b-p">{{ startup.sector }}</span>
+          <span class="bdg b-ok">{{ startup.get_stage_display }}</span>
+          {% if startup.city %}<span class="bdg b-mu">{{ startup.city }}</span>{% endif %}
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:2rem;font-weight:900;color:{% if score.total >= 80 %}var(--ok){% elif score.total >= 60 %}var(--wn){% else %}var(--er){% endif %}">{{ score.total }}</div>
+        <div style="font-size:.72rem;color:var(--mu)">/100 نقطة</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+    {# المحاور #}
+    <div class="card">
+      <div class="card-head">
+        <div class="ch-ico"><i class="ti ti-chart-radar"></i></div>
+        <div><div class="ch-t">تفصيل المحاور</div><div class="ch-s">كل محور من 10 نقاط</div></div>
+      </div>
+      {% for label, val, icon in axes %}
+      <div style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:.83rem;font-weight:700;color:var(--dk)">
+            <i class="ti {{ icon }}" style="color:var(--p)"></i> {{ label }}
+          </div>
+          <div style="font-size:.83rem;font-weight:900;color:{% if val >= 8 %}var(--ok){% elif val >= 5 %}var(--wn){% else %}var(--er){% endif %}">{{ val }}/10</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:99px;height:8px;overflow:hidden">
+          <div style="height:100%;width:{{ val }}0%;background:{% if val >= 8 %}var(--ok){% elif val >= 5 %}var(--wn){% else %}var(--er){% endif %};border-radius:99px;transition:width .4s"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {# المقارنة والتعليقات #}
+    <div style="display:flex;flex-direction:column;gap:16px">
+
+      {# مقارنة بالسوق #}
+      <div class="card">
+        <div class="card-head">
+          <div class="ch-ico"><i class="ti ti-chart-bar"></i></div>
+          <div><div class="ch-t">مقارنة بالسوق</div><div class="ch-s">{{ startup.sector }}</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+          <div style="text-align:center;padding:16px;background:var(--bg2);border-radius:var(--r2)">
+            <div style="font-size:1.6rem;font-weight:900;color:var(--p)">{{ score.total }}</div>
+            <div style="font-size:.72rem;color:var(--mu);margin-top:4px">نقاط هذه الشركة</div>
+          </div>
+          <div style="text-align:center;padding:16px;background:var(--bg2);border-radius:var(--r2)">
+            <div style="font-size:1.6rem;font-weight:900;color:var(--mu)">{{ avg_score }}</div>
+            <div style="font-size:.72rem;color:var(--mu);margin-top:4px">متوسط {{ similar_count }} شركة مشابهة</div>
+          </div>
+        </div>
+        {% if score.total > avg_score %}
+        <div style="margin-top:10px;padding:10px;background:var(--okg);border-radius:var(--r2);font-size:.78rem;color:var(--ok);font-weight:600">
+          <i class="ti ti-trending-up"></i> أعلى من متوسط السوق بـ {{ score.total|add:"-"|add:avg_score }} نقطة
+        </div>
+        {% elif score.total < avg_score %}
+        <div style="margin-top:10px;padding:10px;background:var(--erg);border-radius:var(--r2);font-size:.78rem;color:var(--er);font-weight:600">
+          <i class="ti ti-trending-down"></i> أقل من متوسط السوق
+        </div>
+        {% endif %}
+      </div>
+
+      {# تعليق الإدارة/المستشار #}
+      {% if score.admin_notes %}
+      <div class="card">
+        <div class="card-head">
+          <div class="ch-ico"><i class="ti ti-message-2"></i></div>
+          <div><div class="ch-t">تعليق المستشار</div><div class="ch-s">ملاحظات على نقاط الضعف والقوة</div></div>
+        </div>
+        <div style="font-size:.85rem;color:var(--dk);line-height:1.75;margin-top:8px">{{ score.admin_notes }}</div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  {# زر الإجراء #}
+  <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+    <a href="javascript:history.back()" class="btn btn-o"><i class="ti ti-arrow-right"></i> رجوع</a>
+    {% if not has_nda and request.user.role == 'investor' %}
+    <a href="{% url 'data_room:nda_sign' startup.pk %}" class="btn btn-p"><i class="ti ti-file-check"></i> توقيع NDA والوصول الكامل</a>
+    {% elif has_nda %}
+    <a href="{% url 'deals:request_access' startup.pk %}" class="btn btn-p"><i class="ti ti-send"></i> طلب الوصول الكامل</a>
+    {% endif %}
+  </div>
+
+</section>
+{% endblock %}
