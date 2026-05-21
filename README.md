@@ -65,19 +65,4 @@ python manage.py runserver
 
 ---
 
-## هيكل المشروع
-
-```
-├── accounts/        # المستخدمون + التحقق من البريد
-├── profiles/        # ملفات Startup / Investor / Advisor
-├── dashboard/       # لوحات التحكم
-├── deals/           # طلبات الاستثمار والصفقات
-├── advisory/        # خدمات المستشارين
-├── messaging/       # المراسلات
-├── payments/        # المدفوعات (Moyasar)
-├── notifications/   # الإشعارات
-├── scoring/         # نظام التقييم
-├── data_room/       # غرفة البيانات
-├── control_center/  # لوحة الإدارة
-└── manage.py
 ```
